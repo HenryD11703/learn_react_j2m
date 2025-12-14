@@ -1,13 +1,15 @@
-import { GoogleGenAI } from "@google/genai";
+import Groq from "groq-sdk";
 import { NextResponse } from "next/server";
-// if not set it gets from a default value from .env
-const genAI = new GoogleGenAI({});
+
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
+});
 
 export async function POST(request: Request) {
-  // Este sera el endpoint que recibe el codigo del frontend
   try {
     const body = await request.json();
     const { userCode, exerciseInstruction } = body;
+
     if (!userCode || !exerciseInstruction) {
       return NextResponse.json({ error: "Datos incompletos" }, { status: 400 });
     }
@@ -35,14 +37,14 @@ export async function POST(request: Request) {
     Reglas importantes:
     - No seas condescendiente.
     - Si algo funciona pero puede causar bugs en escenarios reales, menciónalo.
-    - Prioriza patrones robustos sobre soluciones “rápidas”.
+    - Prioriza patrones robustos sobre soluciones "rápidas".
     - El feedback debe ayudar al estudiante a crecer de junior a mid.
 
     Devuelve ÚNICAMENTE JSON válido, sin texto adicional ni bloques de código.
     Formato exacto:
     {
-    "aprobado": boolean,
-    "mensaje": string
+      "aprobado": boolean,
+      "mensaje": string
     }
 
     El mensaje debe ser:
@@ -51,21 +53,42 @@ export async function POST(request: Request) {
     - Máximo 2 líneas
     `;
 
-    const result = await genAI.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: prompt,
+    const completion = await groq.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        {
+          role: "system",
+          content:
+            "Eres un revisor técnico senior de React. Respondes SOLO en formato JSON válido, sin markdown ni texto adicional.",
+        },
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      temperature: 0.3,
+      max_tokens: 500,
+      response_format: { type: "json_object" },
     });
 
-    const response = result?.text;
-    if (!response) throw new Error("No se obtuvo respuesta de la API");
+    const response = completion.choices[0]?.message?.content;
+
+    if (!response) {
+      throw new Error("No se obtuvo respuesta de la API");
+    }
 
     const cleanResponse = response.replace(/```json|```/g, "").trim();
+    const parsedResponse = JSON.parse(cleanResponse);
 
-    return NextResponse.json(JSON.parse(cleanResponse));
+    return NextResponse.json(parsedResponse);
   } catch (error) {
-    console.log(error);
+    console.error("Error en /api/revisar-codigo:", error);
+
     return NextResponse.json(
-      { error: "Error analizando codigo" },
+      {
+        error: "Error analizando código",
+        details: error instanceof Error ? error.message : "Error desconocido",
+      },
       { status: 500 }
     );
   }
