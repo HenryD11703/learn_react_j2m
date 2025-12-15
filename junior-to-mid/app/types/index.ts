@@ -1,4 +1,4 @@
-export type Difficulty = "junior" | "mid" | "senior";
+export type Difficulty = "easy" | "medium" | "hard";
 
 export interface Hint {
   question: string;
@@ -10,12 +10,11 @@ export interface Exercise {
   title: string;
   difficulty: Difficulty;
 
-  // Contenido del ejercicio
   objective: string; // Descripción corta del objetivo
   steps: string[]; // Array de pasos a seguir
   hints?: Hint[]; // Pistas expandibles (opcional)
 
-  // Teoría (opcional, para el futuro)
+  // Teoría
   theory?: {
     title: string;
     content: string; // Puede ser markdown
@@ -27,6 +26,6 @@ export interface Exercise {
   aiInstruction: string;
 
   // Metadata adicional
-  estimatedTime?: number; // En minutos
+  estimatedTime?: number;
   tags?: string[]; // ["hooks", "state", "events"]
 }

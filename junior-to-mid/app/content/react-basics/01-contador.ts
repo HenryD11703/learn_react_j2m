@@ -4,11 +4,10 @@ import { Exercise } from "@/types";
 export const contadorExercise: Exercise = {
   slug: "contador-simple",
   title: "Intro: El Estado en React",
-  difficulty: "junior",
+  difficulty: "easy",
 
-  // Contenido estructurado
   objective:
-    "Vamos a empezar por lo básico. Los componentes en React necesitan 'recordar' cosas. En este ejercicio aprenderás a usar useState para crear un contador interactivo.",
+    "En este ejercicio aprenderás a usar useState para que un componente pueda recordar y actualizar información. Crearás un contador interactivo que se incrementa cada vez que el usuario hace click.",
 
   steps: [
     "Importa `useState` desde React",
@@ -62,11 +61,10 @@ const [variable, setVariable] = useState(valorInicial);
     ],
   },
 
-  // Configuración técnica
   startingCode: `import React from 'react';
 
 export default function Contador() {
-  // 👻 Tu código va aquí
+  // Tu código va aquí
   
   return (
     <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>

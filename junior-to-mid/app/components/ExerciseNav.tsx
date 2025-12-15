@@ -6,7 +6,7 @@ import Link from "next/link";
 interface Exercise {
   slug: string;
   title: string;
-  difficulty: "junior" | "mid" | "senior";
+  difficulty: "easy" | "medium" | "hard";
   completed?: boolean;
 }
 
@@ -25,14 +25,13 @@ export default function ExerciseNav({ exercises, currentSlug }: Props) {
       : exercises.filter((ex) => ex.difficulty === filterDifficulty);
 
   const difficultyColors = {
-    junior: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-    mid: "bg-amber-500/10 text-amber-400 border-amber-500/20",
-    senior: "bg-rose-500/10 text-rose-400 border-rose-500/20",
+    easy: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    medium: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+    hard: "bg-rose-500/10 text-rose-400 border-rose-500/20",
   };
 
   return (
     <>
-      {/* Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed top-4 left-4 z-50 p-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 backdrop-blur-sm transition-all"
@@ -53,7 +52,6 @@ export default function ExerciseNav({ exercises, currentSlug }: Props) {
         </svg>
       </button>
 
-      {/* Overlay */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
@@ -61,13 +59,11 @@ export default function ExerciseNav({ exercises, currentSlug }: Props) {
         />
       )}
 
-      {/* Drawer */}
       <div
         className={`fixed top-0 left-0 h-full w-80 bg-[#0F0F0F] border-r border-white/10 z-50 transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        {/* Header */}
         <div className="p-6 border-b border-white/10">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-white">Ejercicios</h2>
@@ -91,7 +87,6 @@ export default function ExerciseNav({ exercises, currentSlug }: Props) {
             </button>
           </div>
 
-          {/* Filters */}
           <div className="flex gap-2">
             {["all", "junior", "mid", "senior"].map((level) => (
               <button
@@ -109,7 +104,6 @@ export default function ExerciseNav({ exercises, currentSlug }: Props) {
           </div>
         </div>
 
-        {/* Exercise List */}
         <div className="overflow-y-auto h-[calc(100%-120px)] p-4 space-y-2">
           {filteredExercises.map((exercise) => (
             <Link

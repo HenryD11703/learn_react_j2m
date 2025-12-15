@@ -1,5 +1,5 @@
 // app/ejercicios/[slug]/page.tsx
-import { getExerciseBySlug } from "@/lib/exercises-registry";
+import { getExerciseBySlug, getAllExercises } from "@/lib/exercises-registry";
 import { notFound } from "next/navigation";
 import ClientEditor from "@/components/ClientEditor";
 import ExerciseSidebar from "@/components/ExcerciseSidebar";
@@ -11,20 +11,10 @@ interface PageProps {
   }>;
 }
 
-// Mock de ejercicios para la navegación (después esto vendrá del registry)
-const mockExercises = [
-  {
-    slug: "contador-simple",
-    title: "Intro: El Estado en React",
-    difficulty: "junior" as const,
-    completed: false,
-  },
-  // Más ejercicios aquí...
-];
-
 export default async function ExercisePage({ params }: PageProps) {
   const { slug } = await params;
   const exercise = getExerciseBySlug(slug);
+  const exercisesList = getAllExercises();
 
   if (!exercise) {
     notFound();
@@ -32,10 +22,8 @@ export default async function ExercisePage({ params }: PageProps) {
 
   return (
     <div className="flex h-screen flex-col md:flex-row bg-[#0A0A0A] text-white">
-      {/* Navigation Drawer */}
-      <ExerciseNav exercises={mockExercises} currentSlug={slug} />
+      <ExerciseNav exercises={exercisesList} currentSlug={slug} />
 
-      {/* Sidebar con tabs */}
       <ExerciseSidebar exercise={exercise} />
 
       {/* Editor Area */}

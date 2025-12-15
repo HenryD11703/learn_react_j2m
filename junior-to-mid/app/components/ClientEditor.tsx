@@ -21,7 +21,6 @@ export default function ClientEditor({ startingCode, aiInstruction }: Props) {
         theme="dark"
         files={{ "/App.js": startingCode }}
       >
-        {/* Editor con altura FORZADA */}
         <div className="absolute inset-0 bottom-[72px]">
           <SandpackLayout
             style={{
@@ -45,7 +44,6 @@ export default function ClientEditor({ startingCode, aiInstruction }: Props) {
           </SandpackLayout>
         </div>
 
-        {/* Review Panel - altura fija */}
         <div className="absolute bottom-0 left-0 right-0 h-[72px]">
           <ReviewPanel instruction={aiInstruction} />
         </div>

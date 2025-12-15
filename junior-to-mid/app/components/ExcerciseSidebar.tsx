@@ -1,7 +1,21 @@
 "use client";
-
 import { useState } from "react";
 import { Exercise } from "@/types";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import type { Components } from "react-markdown";
+import MarkdownRenderer from "@/components/MarkdownRenderer";
+import {
+  Clock,
+  Target,
+  List,
+  Lightbulb,
+  BookOpen,
+  Code,
+  Eye,
+  Save,
+  FileText,
+} from "lucide-react";
 
 interface Props {
   exercise: Exercise;
@@ -12,9 +26,9 @@ export default function ExerciseSidebar({ exercise }: Props) {
   const [expandedHints, setExpandedHints] = useState<Set<number>>(new Set());
 
   const difficultyColors = {
-    junior: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-    mid: "bg-amber-500/10 text-amber-400 border-amber-500/20",
-    senior: "bg-rose-500/10 text-rose-400 border-rose-500/20",
+    easy: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    medium: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+    hard: "bg-rose-500/10 text-rose-400 border-rose-500/20",
   };
 
   const toggleHint = (index: number) => {
@@ -30,171 +44,159 @@ export default function ExerciseSidebar({ exercise }: Props) {
   };
 
   return (
-    <div className="w-full md:w-[420px] flex flex-col border-r border-white/10 bg-[#0F0F0F]">
-      {/* Header */}
-      <div className="p-6 border-b border-white/10">
-        <div className="flex items-center gap-3 mb-4">
-          <div
-            className={`px-3 py-1 rounded-md border text-xs font-medium uppercase tracking-wider ${
-              difficultyColors[exercise.difficulty]
-            }`}
-          >
-            {exercise.difficulty}
+    <div className="h-full w-140 flex-shrink-0 flex flex-col bg-black border-l border-white/10">
+      <div className="flex-1 overflow-y-auto">
+        <div className="sticky top-0 z-10 bg-black/95 backdrop-blur-sm border-b border-white/10 px-6 py-4 space-y-3">
+          <div className="flex items-center justify-between gap-2">
+            <span
+              className={`text-xs px-2 py-1 rounded-full border capitalize ${
+                difficultyColors[exercise.difficulty]
+              }`}
+            >
+              {exercise.difficulty}
+            </span>
+            {exercise.estimatedTime && (
+              <span className="flex items-center gap-1.5 text-xs text-gray-400">
+                <Clock className="w-3.5 h-3.5" />~{exercise.estimatedTime} min
+              </span>
+            )}
           </div>
-          {exercise.estimatedTime && (
-            <div className="text-xs text-gray-500">
-              ⏱️ ~{exercise.estimatedTime} min
-            </div>
-          )}
+          <h2 className="text-lg font-bold text-white leading-tight">
+            {exercise.title}
+          </h2>
         </div>
 
-        <h1 className="text-2xl font-semibold mb-2 leading-tight">
-          {exercise.title}
-        </h1>
-
-        {/* Tabs */}
-        <div className="flex gap-2 mt-4">
+        <div className="flex gap-2 px-6 py-4 bg-white/[0.02]">
           <button
             onClick={() => setActiveTab("exercise")}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
               activeTab === "exercise"
                 ? "bg-white text-black"
                 : "text-gray-400 hover:text-white"
             }`}
           >
-            📋 Ejercicio
+            <FileText className="w-4 h-4" />
+            Ejercicio
           </button>
           {exercise.theory && (
             <button
               onClick={() => setActiveTab("theory")}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
                 activeTab === "theory"
                   ? "bg-white text-black"
                   : "text-gray-400 hover:text-white"
               }`}
             >
-              📚 Teoría
+              <BookOpen className="w-4 h-4" />
+              Teoría
             </button>
           )}
         </div>
-      </div>
 
-      {/* Content Area */}
-      <div className="flex-1 overflow-y-auto px-6 py-6">
-        {activeTab === "exercise" ? (
-          <div className="space-y-6">
-            {/* Objetivo */}
-            <div>
-              <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">
-                Tu Misión
-              </h2>
-              <p className="text-gray-300 leading-relaxed">
-                {exercise.objective}
-              </p>
-            </div>
-
-            {/* Steps */}
-            <div>
-              <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">
-                Pasos a Seguir
-              </h2>
+        <div className="px-6 py-4">
+          {activeTab === "exercise" ? (
+            <>
               <div className="space-y-3">
+                <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                  <Target className="w-5 h-5 text-blue-400" />
+                  Tu Misión
+                </h3>
+                <p className="text-sm text-gray-300 leading-relaxed">
+                  {exercise.objective}
+                </p>
+              </div>
+
+              <div className="space-y-3 mt-6">
+                <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                  <List className="w-5 h-5 text-purple-400" />
+                  Pasos a Seguir
+                </h3>
                 {exercise.steps.map((step, index) => (
                   <div
                     key={index}
-                    className="flex gap-3 p-4 rounded-lg bg-white/5 border border-white/10 hover:bg-white/[0.07] transition-colors"
+                    className="flex gap-3 p-3 rounded-lg bg-white/5 border border-white/10"
                   >
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold">
+                    <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-white/10 text-xs font-bold text-white">
                       {index + 1}
-                    </div>
-                    <p className="text-sm text-gray-300 leading-relaxed flex-1">
+                    </span>
+                    <p className="text-sm text-gray-300 leading-relaxed">
                       {step}
                     </p>
                   </div>
                 ))}
               </div>
-            </div>
 
-            {/* Hints expandibles */}
-            {exercise.hints && exercise.hints.length > 0 && (
-              <div>
-                <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">
-                  💡 Pistas
-                </h2>
-                <div className="space-y-2">
+              {exercise.hints && exercise.hints.length > 0 && (
+                <div className="space-y-3 mt-6">
+                  <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                    <Lightbulb className="w-5 h-5 text-yellow-400" />
+                    Pistas
+                  </h3>
                   {exercise.hints.map((hint, index) => (
-                    <button
-                      key={index}
-                      onClick={() => toggleHint(index)}
-                      className="w-full text-left p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/[0.07] transition-colors"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-300">
-                          {hint.question}
-                        </span>
-                        <span className="text-gray-500 text-lg">
-                          {expandedHints.has(index) ? "-" : "+"}
-                        </span>
-                      </div>
+                    <div key={index} className="space-y-2">
+                      <button
+                        onClick={() => toggleHint(index)}
+                        className="w-full text-left p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/[0.07] transition-colors"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-300">
+                            {hint.question}
+                          </span>
+                          <span className="text-white font-bold text-lg">
+                            {expandedHints.has(index) ? "−" : "+"}
+                          </span>
+                        </div>
+                      </button>
                       {expandedHints.has(index) && (
-                        <div className="mt-3 pt-3 border-t border-white/10">
-                          <pre className="text-xs text-emerald-400 font-mono whitespace-pre-wrap bg-black/30 p-3 rounded">
+                        <div className="p-3 rounded-lg bg-blue-500/5 border border-blue-500/20">
+                          <pre className="text-xs text-gray-300 whitespace-pre-wrap font-mono">
                             {hint.answer}
                           </pre>
                         </div>
                       )}
-                    </button>
+                    </div>
                   ))}
                 </div>
-              </div>
-            )}
-          </div>
-        ) : (
-          // Tab de Teoría
-          exercise.theory && (
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-xl font-semibold mb-4">
+              )}
+            </>
+          ) : (
+            exercise.theory && (
+              <div className="space-y-4">
+                <h3 className="text-lg font-bold text-white">
                   {exercise.theory.title}
-                </h2>
-                <div className="prose prose-invert prose-sm max-w-none">
-                  <div className="text-gray-300 whitespace-pre-wrap leading-relaxed">
-                    {exercise.theory.content}
-                  </div>
-                </div>
-              </div>
-
-              {exercise.theory.examples && (
-                <div>
-                  <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">
-                    Ejemplos
-                  </h3>
-                  <div className="space-y-2">
+                </h3>
+                <MarkdownRenderer content={exercise.theory.content} />
+                {exercise.theory.examples && (
+                  <div className="mt-6 space-y-3">
+                    <h4 className="text-sm font-semibold text-white flex items-center gap-2">
+                      <Code className="w-5 h-5 text-green-400" />
+                      Ejemplos
+                    </h4>
                     {exercise.theory.examples.map((example, index) => (
-                      <pre
+                      <div
                         key={index}
-                        className="text-sm text-emerald-400 font-mono bg-black/30 p-3 rounded border border-white/10"
+                        className="p-4 rounded-lg bg-white/5 border border-white/10"
                       >
-                        {example}
-                      </pre>
+                        <pre className="text-xs text-gray-300 whitespace-pre-wrap font-mono overflow-x-auto">
+                          {example}
+                        </pre>
+                      </div>
                     ))}
                   </div>
-                </div>
-              )}
-            </div>
-          )
-        )}
+                )}
+              </div>
+            )
+          )}
+        </div>
       </div>
 
-      {/* Footer */}
-      <div className="p-6 border-t border-white/10 bg-[#0A0A0A] space-y-2">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
-          <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-          <span>Preview actualiza en tiempo real</span>
+      <div className="px-6 py-4 bg-white/[0.02] border-t border-white/10 text-xs text-gray-400 space-y-1.5">
+        <div className="flex items-center gap-2">
+          <Eye className="w-3.5 h-3.5" />
+          Preview actualiza en tiempo real
         </div>
-        <div className="flex items-center gap-2 text-xs text-gray-500">
-          <span>⌘ + S</span>
-          <span>Guardar y verificar</span>
+        <div className="flex items-center gap-2">
+          <Save className="w-3.5 h-3.5" />⌘ + S Guardar y verificar
         </div>
       </div>
     </div>

@@ -45,7 +45,6 @@ export default function ReviewPanel({ instruction }: Props) {
 
   return (
     <div className="h-full flex items-center justify-between px-6 bg-[#0A0A0A] border-t border-white/10">
-      {/* Feedback Section */}
       <div className="flex-1 max-w-2xl">
         {feedback ? (
           <div
@@ -67,7 +66,6 @@ export default function ReviewPanel({ instruction }: Props) {
         )}
       </div>
 
-      {/* Action Button */}
       <button
         onClick={handleCheck}
         disabled={loading}
