@@ -88,7 +88,7 @@ export default function ExerciseNav({ exercises, currentSlug }: Props) {
           </div>
 
           <div className="flex gap-2">
-            {["all", "junior", "mid", "senior"].map((level) => (
+            {["all", "easy", "medium", "hard"].map((level) => (
               <button
                 key={level}
                 onClick={() => setFilterDifficulty(level)}

@@ -1,4 +1,3 @@
-// app/ejercicios/[slug]/page.tsx
 import { getExerciseBySlug, getAllExercises } from "@/lib/exercises-registry";
 import { notFound } from "next/navigation";
 import ClientEditor from "@/components/ClientEditor";
@@ -29,7 +28,7 @@ export default async function ExercisePage({ params }: PageProps) {
       {/* Editor Area */}
       <div className="flex-1 min-h-0 h-full">
         <ClientEditor
-          startingCode={exercise.startingCode}
+          files={exercise.files}
           aiInstruction={exercise.aiInstruction}
         />
       </div>

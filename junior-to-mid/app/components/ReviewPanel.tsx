@@ -18,14 +18,21 @@ export default function ReviewPanel({ instruction }: Props) {
     setLoading(true);
     setFeedback(null);
 
-    const code = sandpack.files["/App.js"]?.code;
+    let allCode = "";
+
+    Object.entries(sandpack.files).forEach(([fileName, fileData]) => {
+      if (!fileData.hidden) {
+        allCode += `\n--- ARCHIVO: ${fileName} ---\n`;
+        allCode += fileData.code;
+      }
+    });
 
     try {
       const res = await fetch("/api/revisar-codigo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userCode: code,
+          userCode: allCode,
           exerciseInstruction: instruction,
         }),
       });

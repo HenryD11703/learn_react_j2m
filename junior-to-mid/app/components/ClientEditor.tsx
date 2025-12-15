@@ -9,18 +9,14 @@ import {
 import ReviewPanel from "./ReviewPanel";
 
 interface Props {
-  startingCode: string;
+  files: Record<string, string>;
   aiInstruction: string;
 }
 
-export default function ClientEditor({ startingCode, aiInstruction }: Props) {
+export default function ClientEditor({ files, aiInstruction }: Props) {
   return (
     <div className="relative w-full h-full bg-[#0A0A0A]">
-      <SandpackProvider
-        template="react"
-        theme="dark"
-        files={{ "/App.js": startingCode }}
-      >
+      <SandpackProvider template="react" theme="dark" files={files}>
         <div className="absolute inset-0 bottom-[72px]">
           <SandpackLayout
             style={{
@@ -29,7 +25,7 @@ export default function ClientEditor({ startingCode, aiInstruction }: Props) {
             }}
           >
             <SandpackCodeEditor
-              showTabs={false}
+              showTabs={true}
               style={{
                 height: "100%",
                 fontSize: "14px",

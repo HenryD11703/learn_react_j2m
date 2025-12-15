@@ -1,4 +1,3 @@
-// app/content/react-basics/01-contador.ts
 import { Exercise } from "@/types";
 
 export const contadorExercise: Exercise = {
@@ -61,7 +60,8 @@ const [variable, setVariable] = useState(valorInicial);
     ],
   },
 
-  startingCode: `import React from 'react';
+  files: {
+    "App.js": `import React from 'react';
 
 export default function Contador() {
   // Tu código va aquí
@@ -73,6 +73,7 @@ export default function Contador() {
     </div>
   );
 }`,
+  },
 
   aiInstruction: `
 El estudiante debe crear un contador simple usando useState.

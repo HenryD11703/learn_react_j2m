@@ -22,7 +22,8 @@ export interface Exercise {
   };
 
   // Configuración técnica
-  startingCode: string;
+  files: Record<string, string>;
+  hiddenFiles?: Record<string, string>;
   aiInstruction: string;
 
   // Metadata adicional

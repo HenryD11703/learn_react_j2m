@@ -1,9 +1,6 @@
 "use client";
 import { useState } from "react";
 import { Exercise } from "@/types";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import type { Components } from "react-markdown";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import {
   Clock,
