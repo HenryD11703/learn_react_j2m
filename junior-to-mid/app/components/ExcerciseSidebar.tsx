@@ -140,7 +140,7 @@ export default function ExerciseSidebar({ exercise }: Props) {
                             {hint.question}
                           </span>
                           <span className="text-white font-bold text-lg">
-                            {expandedHints.has(index) ? "−" : "+"}
+                            {expandedHints.has(index) ? "-" : "+"}
                           </span>
                         </div>
                       </button>

@@ -2,7 +2,7 @@ import { Exercise } from "@/types";
 
 export const performanceListExercise: Exercise = {
   slug: "performance-list-memo",
-  title: "Performance: Lista Lenta (El Jefe Final)",
+  title: "Performance: Lista Lenta",
   difficulty: "hard",
 
   objective:
