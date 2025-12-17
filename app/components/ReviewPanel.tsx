@@ -95,7 +95,6 @@ export default function ReviewPanel({ instruction }: Props) {
         ) : (
           <>
             <span>Verificar Código</span>
-            <span className="text-xs opacity-60">⌘↵</span>
           </>
         )}
       </button>

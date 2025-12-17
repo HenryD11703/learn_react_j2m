@@ -192,9 +192,6 @@ export default function ExerciseSidebar({ exercise }: Props) {
           <Eye className="w-3.5 h-3.5" />
           Preview actualiza en tiempo real
         </div>
-        <div className="flex items-center gap-2">
-          <Save className="w-3.5 h-3.5" />⌘ + S Guardar y verificar
-        </div>
       </div>
     </div>
   );
