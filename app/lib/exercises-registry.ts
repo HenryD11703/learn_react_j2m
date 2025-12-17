@@ -7,16 +7,27 @@ import { fetchingRobustoExercise } from "@/content/react-basics/05-fetching";
 import { customHookExercise } from "@/content/react-basics/06-custom-hooks";
 import { themeContextExercise } from "@/content/react-basics/07-theme-switcher";
 import { performanceListExercise } from "@/content/react-basics/09-performance";
+import { controlledFormsExercise } from "@/content/react-basics/08-forms";
+import { useRefExercise } from "@/content/react-basics/10-escapeDOM";
+import { useReducerUndoExercise } from "@/content/react-basics/11-reducer";
+import { liftingStateExercise } from "@/content/react-basics/12-lifting";
 
 const exercises: Exercise[] = [
+  // Easy
   contadorExercise,
   todoListExercise,
   semaforoExercise,
+  liftingStateExercise,
+  // Medium
   cronometroFantasmaExercise,
   fetchingRobustoExercise,
   customHookExercise,
   themeContextExercise,
+  controlledFormsExercise,
+  useRefExercise,
+  // Hard
   performanceListExercise,
+  useReducerUndoExercise,
 ];
 
 export function getExerciseBySlug(slug: string): Exercise | undefined {

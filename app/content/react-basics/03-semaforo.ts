@@ -6,110 +6,85 @@ export const semaforoExercise: Exercise = {
   difficulty: "easy",
 
   objective:
-    "Aprenderás a renderizar diferentes elementos según el estado usando operadores ternarios, && y objetos de mapeo. Crearás un componente tipo semáforo que muestra diferentes mensajes, colores e iconos según su estado.",
+    "Aprenderás a mostrar diferentes elementos de la interfaz según el estado de la aplicación, utilizando técnicas limpias como el Operador Ternario, el cortocircuito (&&) y Objetos de Mapeo.",
 
   steps: [
-    "Crea un estado `status` que puede ser 'success', 'error' o 'loading'",
-    "Define un objeto de configuración que mapee cada estado a su color, icono y mensaje",
-    "Renderiza el contenido dinámicamente basándote en el estado actual",
-    "Agrega botones para cambiar entre los diferentes estados",
-    "Usa operadores ternarios o && para renderizado condicional limpio",
+    "Crea un estado llamado `status` inicializado en 'loading'.",
+    "Define un objeto de configuración (fuera del return) que asocie cada estado ('success', 'error', 'loading') con un color, un icono y un mensaje.",
+    "Aplica estilos dinámicos al contenedor principal usando el color del estado actual.",
+    "Renderiza el icono y el mensaje accediendo a tu objeto de configuración.",
+    "Crea botones que permitan al usuario cambiar el estado manualmente para probar la reactividad.",
   ],
 
   hints: [
     {
-      question: "¿Cómo creo el estado para los diferentes status?",
-      answer: `const [status, setStatus] = useState('loading');
-
-Puedes cambiar entre: 'success', 'error', 'loading'`,
+      question: "¿Cómo defino el objeto de configuración?",
+      answer: `Es una buena práctica definirlo así:
+const CONFIGS = {
+  success: { color: '#2ecc71', icon: '✅', text: '¡Todo salió bien!' },
+  error: { color: '#e74c3c', icon: '❌', text: 'Hubo un error' },
+  loading: { color: '#f1c40f', icon: '⏳', text: 'Cargando...' }
+};`,
     },
     {
-      question: "¿Cómo evito muchos if/else en el JSX?",
-      answer: `Usa un objeto de mapeo:
-
-const configs = {
-  success: { color: 'green', icono: '✓', mensaje: 'Operación exitosa' },
-  error: { color: 'red', icono: '✗', mensaje: 'Error al procesar' },
-  loading: { color: 'orange', icono: '⟳', mensaje: 'Cargando...' }
-};
-
-Luego accede: configs[status].mensaje`,
+      question: "¿Cómo accedo a los datos del objeto dinámicamente?",
+      answer: `Si tu estado se llama 'status', puedes acceder a la configuración así:
+      
+const currentConfig = CONFIGS[status];
+// Luego usas: currentConfig.color o currentConfig.text`,
     },
     {
-      question: "¿Cuándo uso ternarios vs && ?",
-      answer: `// Ternario: cuando hay dos opciones
-{isLoggedIn ? <Dashboard /> : <Login />}
+      question: "¿Qué pasa si quiero mostrar algo solo en un caso?",
+      answer: `Para eso usa el operador && (AND):
+{status === 'loading' && <Spinner />}
 
-// &&: cuando solo renderizas si es true
-{hasError && <ErrorMessage />}
-
-// Objeto de mapeo: cuando hay 3+ opciones
-{statusConfig[status].component}`,
-    },
-    {
-      question: "¿Cómo aplico estilos dinámicos según el estado?",
-      answer: `style={{ 
-  backgroundColor: configs[status].color,
-  color: 'white',
-  padding: '20px'
-}}
-
-O puedes usar clases dinámicas:
-className={\`alert alert-\${status}\`}`,
+💡 Esto solo renderizará el Spinner si la condición de la izquierda es verdadera.`,
     },
   ],
 
   theory: {
-    title: "Renderizado Condicional en React",
+    title: "Renderizado Condicional Eficiente",
     content: `
 **¿Por qué es importante?**
-El renderizado condicional te permite mostrar diferentes UI según el estado de tu aplicación. Es fundamental para crear experiencias dinámicas.
+En una aplicación real, las interfaces no son estáticas. Necesitas mostrar un mensaje de carga mientras llegan los datos, o un error si algo falla. El renderizado condicional permite que tu UI sea una "función de tu estado".
 
-**Técnicas de renderizado condicional:**
+**1. Técnicas comunes:**
+- **Operador Ternario (\`? :\`):** Ideal para elegir entre dos opciones (ej. botón de Login vs Logout).
+- **Cortocircuito (\`&&\`):** Perfecto para mostrar algo o nada.
+- **Objetos de Mapeo (Lookup Tables):** La técnica más limpia cuando tienes 3 o más estados posibles. Evita que tu código se llene de lógica compleja.
 
-1. **Operador Ternario (? :)**
-   - Perfecto para elegir entre dos opciones
-   - Sintaxis: condición ? valorSiTrue : valorSiFalse
+**2. Anti-patrones comunes:**
+- ❌ **Usar \`if/else\` dentro del return:** JSX no permite sentencias de control de flujo directas, solo expresiones.
+- ⚠️ **Ternarios anidados:** Hacer \`condicion ? (otra ? a : b) : c\` es muy difícil de leer y mantener.
+- ❌ **Lógica pesada en el JSX:** No calcules datos complejos dentro de los paréntesis del \`return\`. Hazlo arriba y solo renderiza el resultado.
 
-2. **Operador AND (&&)**
-   - Renderiza solo si la condición es true
-   - Sintaxis: condición && <Componente />
-   - ⚠️ Cuidado con valores falsy (0, '', false)
+**3. Ventajas de las buenas prácticas:**
+- **Escalabilidad:** Si mañana agregas un estado "warning", solo añades una línea a tu objeto de configuración.
+- **Legibilidad:** El JSX se mantiene corto y fácil de entender.
+- **Separación de intereses:** La "lógica" de qué color usa cada estado se separa de la "estructura" HTML.
 
-3. **Objetos de Mapeo**
-   - Ideal para 3+ estados diferentes
-   - Evita "spaghetti code" con muchos if/else
-   - Más mantenible y escalable
+**4. Ejemplos de código:**
 
-**Anti-patrón: If/Else en JSX**
-❌ Evita esto:
+✅ **Correcto (Objeto de Mapeo):**
+\`\`\`javascript
+const theme = { dark: '#000', light: '#fff' };
+
+return <div style={{ background: theme[mode] }}>Hola</div>;
+\`\`\`
+
+❌ **Incorrecto (Lógica en JSX):**
 \`\`\`javascript
 return (
-  <div>
-    {if (status === 'success') { // ❌ No funciona
-      return <Success />
-    }}
+  <div style={{ background: mode === 'dark' ? '#000' : '#fff' }}>
+    Hola
   </div>
-)
+);
 \`\`\`
-
-✅ Mejor:
-\`\`\`javascript
-const configs = { success: {...}, error: {...} };
-return <div>{configs[status].component}</div>
-\`\`\`
-
-**Ventajas del objeto de mapeo:**
-- Código más limpio y legible
-- Fácil de extender (agregar nuevos estados)
-- Separa lógica de presentación
-- Más fácil de testear
 `,
     examples: [
-      "// Ternario\n{isOnline ? <GreenDot /> : <GrayDot />}",
-      "// AND operator\n{showModal && <Modal />}",
-      "// Objeto de mapeo\nconst icons = { success: '✓', error: '✗' };\n<span>{icons[status]}</span>",
-      "// Estilos dinámicos\nstyle={{ color: status === 'error' ? 'red' : 'green' }}",
+      "// Operador &&\n{isAdmin && <AdminPanel />}",
+      "// Ternario\n{isLogged ? <UserMenu /> : <LoginBtn />}",
+      "// Acceso dinámico a objeto\nconst icon = ICONS[status];",
     ],
   },
 
@@ -117,32 +92,29 @@ return <div>{configs[status].component}</div>
     "App.js": `import React, { useState } from 'react';
 
 export default function Semaforo() {
-  // Crea tu estado aquí (puede ser 'success', 'error', o 'loading')
-  
-  // Define un objeto con la configuración de cada estado
-  // Ejemplo: { success: { color: '...', icono: '...', mensaje: '...' } }
+  // 1. Crea el estado 'status' (inicia en 'loading')
+
+  // 2. Define tu objeto de configuración CONFIGS
   
   return (
-    <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
+    <div style={{ padding: '20px', fontFamily: 'sans-serif', textAlign: 'center' }}>
       <h1>Estado del Sistema</h1>
       
-      {/* Renderiza aquí el estado actual con su color, icono y mensaje */}
+      {/* 3. El contenedor debe cambiar su color de fondo */}
       <div style={{ 
         padding: '30px', 
-        borderRadius: '8px',
-        textAlign: 'center',
-        marginTop: '20px'
-        // Agrega el color de fondo dinámico aquí
+        borderRadius: '12px',
+        marginTop: '20px',
+        transition: 'all 0.3s ease'
       }}>
-        {/* Icono */}
-        {/* Mensaje */}
+        {/* 4. Muestra aquí el icono y el mensaje */}
       </div>
       
-      {/* Botones para cambiar el estado */}
-      <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
-        {/* Botón Success */}
-        {/* Botón Error */}
-        {/* Botón Loading */}
+      {/* 5. Agrega los botones para cambiar el estado */}
+      <div style={{ marginTop: '20px', display: 'flex', gap: '10px', justifyContent: 'center' }}>
+        <button>Éxito</button>
+        <button>Error</button>
+        <button>Cargando</button>
       </div>
     </div>
   );
@@ -150,32 +122,21 @@ export default function Semaforo() {
   },
 
   aiInstruction: `
-El estudiante debe crear un componente tipo semáforo con renderizado condicional limpio.
+El estudiante debe implementar un sistema de estados tipo semáforo.
 
-Verifica que:
-1. Tenga un estado con al menos 3 valores posibles ('success', 'error', 'loading')
-2. Use un objeto de mapeo/configuración en lugar de múltiples if/else
-3. El objeto contenga al menos: color, icono/emoji, y mensaje para cada estado
-4. Renderice dinámicamente el contenido basado en el estado actual
-5. Tenga botones para cambiar entre los diferentes estados
-6. Use renderizado condicional limpio (ternarios, &&, o acceso a objeto)
+LISTA DE CHEQUEO:
+1. ¿El estado 'status' tiene valores correctos ('success', 'error', 'loading')?
+2. ¿Evitó usar múltiples if/else o switch dentro del return?
+   - ❌ Si usó muchos if/else: "⚠️ Tu código funciona, pero se está volviendo difícil de leer. Intenta usar un 'objeto de mapeo' para asociar cada estado con su configuración."
+3. ¿El estilo de fondo es dinámico?
+4. ¿Los botones llaman a setStatus con el valor correcto?
+5. ¿Usa sintaxis limpia (acceso a objeto o &&)?
+   - ❌ Si intenta usar 'if' dentro de las llaves {}: "⚠️ Recuerda que dentro de JSX solo puedes usar expresiones (ternarios, &&, mapas). No puedes usar 'if' directamente."
 
-⚠️ ADVERTENCIAS SOBRE PATRONES:
-- Si usa múltiples if/else dentro del return: "❌ Muchos if/else hacen el código difícil de leer. Considera usar un objeto de mapeo donde cada estado tenga su configuración."
-- Si intenta usar if dentro del JSX directamente: "❌ No puedes usar if/else directamente en JSX. Usa ternarios (condición ? a : b), operador && (condición && <Component />), o un objeto de mapeo."
-- Si no separa la configuración de la lógica de render: "💡 Tip: Define un objeto 'configs' fuera del return con toda la configuración de cada estado. Así tu JSX queda más limpio."
-
-✅ Bonus points si:
-- Usa template literals para clases dinámicas
-- Aplica estilos inline dinámicos correctamente
-- El código es limpio y mantenible
-
-Si todo está correcto:
-{ "aprobado": true, "mensaje": "¡Perfecto! Tu renderizado condicional es limpio y mantenible. Usas objetos de mapeo en lugar de if/else anidados, lo cual hace el código mucho más escalable." }
-
-Si hay errores, señala específicamente el patrón problemático y sugiere la alternativa correcta sin dar el código completo.
+MENSAJE DE APROBACIÓN:
+{ "aprobado": true, "mensaje": "✅ ¡Brillante! Has utilizado un objeto de mapeo para gestionar los estados. Esta es la forma más profesional y escalable de manejar interfaces dinámicas en React." }
 `,
 
   estimatedTime: 12,
-  tags: ["conditional-rendering", "ternary", "state", "dynamic-styles"],
+  tags: ["renderizado-condicional", "objetos", "estilos-dinamicos"],
 };

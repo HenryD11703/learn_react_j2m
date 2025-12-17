@@ -6,89 +6,84 @@ export const todoListExercise: Exercise = {
   difficulty: "easy",
 
   objective:
-    "Aprenderás a renderizar listas de elementos usando .map() y a manipular arrays en el estado. Crearás una lista de tareas donde podrás eliminar elementos individuales, entendiendo la importancia de usar keys únicas.",
+    "Aprenderás a transformar arreglos de datos en elementos visuales usando .map() y a manipular el estado de forma inmutable para eliminar elementos.",
 
   steps: [
-    "Crea un estado con un array de tareas (cada tarea debe tener un id único y texto)",
-    "Usa .map() para renderizar cada tarea en pantalla",
-    "Asigna la prop `key` usando el `id` de cada tarea (NO uses el index)",
-    "Agrega un botón de eliminar para cada tarea",
-    "Implementa la función para eliminar usando .filter() y actualización basada en el estado previo",
+    "Define un estado inicial con un arreglo de objetos (cada uno con `id` y `texto`).",
+    "Usa el método `.map()` para recorrer el arreglo y devolver JSX por cada tarea.",
+    "Asigna una `key` única a cada elemento de la lista usando el `id` del objeto.",
+    "Implementa una función para eliminar tareas que filtre el arreglo basándose en el `id`.",
+    "Asegúrate de actualizar el estado usando la forma funcional (`prev => ...`).",
   ],
 
   hints: [
     {
-      question: "¿Cómo creo el estado inicial con las tareas?",
-      answer: `const [tareas, setTareas] = useState([
+      question: "¿Cómo debe verse mi estado inicial?",
+      answer: `Puedes empezar con algo así:
+const [tareas, setTareas] = useState([
   { id: 1, texto: "Aprender React" },
-  { id: 2, texto: "Hacer ejercicio" },
-  { id: 3, texto: "Leer un libro" }
+  { id: 2, texto: "Hacer ejercicio" }
 ]);`,
     },
     {
-      question: "¿Cómo renderizo la lista de tareas?",
-      answer: `tareas.map((tarea) => (
+      question: "¿Cómo uso .map() dentro del return?",
+      answer: `Recuerda envolver la lógica entre llaves {}:
+{tareas.map((tarea) => (
   <div key={tarea.id}>
-    <span>{tarea.texto}</span>
-    <button>Eliminar</button>
+    {tarea.texto}
   </div>
-))
-
-⚠️ IMPORTANTE: Usa tarea.id como key, NO el index del array.`,
+))}`,
     },
     {
-      question: "¿Por qué no debo usar el index como key?",
-      answer: `Usar el index como key causa problemas cuando la lista cambia:
-- React puede confundirse sobre qué elementos cambió
-- Puede causar bugs de renderizado
-- El estado de los componentes puede mezclarse
+      question: "¿Cuál es la forma más segura de eliminar un elemento?",
+      answer: `Usa .filter() para crear un nuevo arreglo sin el elemento que quieres quitar:
+const nuevaLista = tareas.filter(t => t.id !== idAEliminar);
 
-✅ Usa: key={tarea.id}
-❌ Evita: key={index}`,
-    },
-    {
-      question: "¿Cómo elimino una tarea específica?",
-      answer: `const eliminarTarea = (id) => {
-  setTareas(prev => prev.filter(tarea => tarea.id !== id));
-};
-
-Luego en el botón:
-<button onClick={() => eliminarTarea(tarea.id)}>Eliminar</button>
-
-💡 Usamos "prev =>" para basar la actualización en el estado anterior, esto es más seguro.`,
+💡 Tip: Para mayor seguridad en React, usa la función de actualización:
+setTareas(prevTareas => prevTareas.filter(...));`,
     },
   ],
 
   theory: {
-    title: "Renderizando Listas en React",
+    title: "Renderizado de Listas y el Poder de las Keys",
     content: `
-**¿Por qué necesitamos keys?**
-React usa keys para identificar qué elementos cambiaron, se agregaron o eliminaron. Las keys ayudan a React a actualizar eficientemente el DOM.
+**¿Por qué es importante?**
+En las aplicaciones modernas, casi toda la información viene en forma de listas (mensajes, productos, tareas). React necesita una forma eficiente de saber qué elemento ha cambiado o desaparecido sin tener que volver a dibujar toda la lista desde cero.
 
-**Reglas de las Keys:**
-1. Deben ser únicas entre hermanos
-2. Deben ser estables (no cambiar entre renders)
-3. Deben ser predecibles (no usar Math.random())
+**1. Técnicas comunes:**
+- **El método .map():** Es el estándar en React para transformar datos en componentes.
+- **Keys únicas:** Usar identificadores estables (IDs de base de datos o UUIDs).
+- **Inmutabilidad:** Usar métodos que devuelven un nuevo arreglo como \`.filter()\` o \`.map()\` en lugar de modificar el original.
 
-**¿Por qué el index es mala práctica?**
-Si eliminas el primer elemento de [0, 1, 2], los índices se reordenan:
-- Elemento con key=1 ahora es key=0
-- React se confunde y puede renderizar mal
+**2. Anti-patrones comunes:**
+- ❌ **Usar el "index" como key:** Si la lista se reordena o se elimina un elemento, los índices cambian y React puede mezclar el estado de componentes diferentes.
+- ❌ **Mutar el estado:** Nunca uses \`push()\`, \`pop()\` o \`splice()\` directamente sobre el estado.
+- ⚠️ **Keys aleatorias:** Generar una key con \`Math.random()\` en el render causará que toda la lista se destruya y recree en cada actualización.
 
-**Actualizaciones inmutables:**
-Nunca modifiques el array directamente:
-❌ tareas.splice(index, 1)
-✅ setTareas(tareas.filter(t => t.id !== id))
+**3. Ventajas de las buenas prácticas:**
+- **Rendimiento:** React solo actualiza el elemento exacto que cambió.
+- **Consistencia:** Evitas errores visuales donde el texto de una tarea se queda en el input de otra tras eliminar.
+- **Mantenibilidad:** Tu lógica de datos es predecible y fácil de seguir.
 
-**setState con función:**
-Cuando el nuevo estado depende del anterior, usa la forma funcional:
-✅ setTareas(prev => prev.filter(...))
-Esto asegura que siempre trabajas con el estado más reciente.
+**4. Ejemplos de código:**
+
+✅ **Correcto (Uso de ID estable):**
+\`\`\`javascript
+{items.map(item => (
+  <li key={item.id}>{item.name}</li>
+))}
+\`\`\`
+
+❌ **Incorrecto (Uso de Index):**
+\`\`\`javascript
+{items.map((item, index) => (
+  <li key={index}>{item.name}</li>
+))}
+\`\`\`
 `,
     examples: [
-      "// Renderizar lista\nitems.map(item => <div key={item.id}>{item.name}</div>)",
-      "// Eliminar elemento\nsetItems(prev => prev.filter(item => item.id !== idToRemove))",
-      "// Agregar elemento\nsetItems(prev => [...prev, newItem])",
+      "// Eliminar con filter\nsetItems(prev => prev.filter(i => i.id !== targetId));",
+      "// Estructura de objeto recomendada\n{ id: crypto.randomUUID(), texto: 'Tarea' }",
     ],
   },
 
@@ -96,20 +91,22 @@ Esto asegura que siempre trabajas con el estado más reciente.
     "App.js": `import React, { useState } from 'react';
 
 export default function TodoList() {
-  // Crea aquí tu estado con un array de tareas
-  // Ejemplo: [{ id: 1, texto: "Aprender React" }, ...]
-  
-  // Función para eliminar tarea
+  // 💡 Tip: Inicializa tu estado con algunas tareas de prueba
+  const [tareas, setTareas] = useState([
+    { id: 1, texto: "Aprender .map()" },
+    { id: 2, texto: "Entender las Keys" }
+  ]);
+
   const eliminarTarea = (id) => {
-    // Tu código aquí
+    // 💡 Tip: Usa .filter() y recuerda la inmutabilidad
   };
   
   return (
     <div style={{ padding: '20px', fontFamily: 'sans-serif', maxWidth: '500px' }}>
       <h1>Mi Lista de Tareas</h1>
       <div style={{ marginTop: '20px' }}>
-        {/* Renderiza aquí tu lista de tareas usando .map() */}
-        {/* Cada tarea debe tener un botón de eliminar */}
+        {/* Renderiza aquí tus tareas */}
+        {/* Cada tarea debe tener su botón de eliminar */}
       </div>
     </div>
   );
@@ -117,27 +114,21 @@ export default function TodoList() {
   },
 
   aiInstruction: `
-El estudiante debe crear una lista de tareas con capacidad de eliminar elementos.
+El estudiante debe renderizar una lista dinámica y permitir la eliminación de elementos.
 
-Verifica estrictamente:
-1. El estado inicial es un array de objetos con estructura {id: number, texto: string}
-2. Usa .map() para renderizar la lista
-3. Cada elemento mapeado tiene key={tarea.id} (NO key={index})
-4. Implementa una función eliminarTarea que usa .filter()
-5. La función de eliminar usa setTareas(prev => prev.filter(...)) con estado previo
-6. Cada tarea tiene un botón que llama a eliminarTarea(tarea.id)
+LISTA DE CHEQUEO:
+1. ¿Usa .map() para iterar sobre el array de tareas?
+2. ¿Asignó una key? 
+   - ❌ Si usó el index: "⚠️ Estás usando el index como key. Esto causará problemas de renderizado. Usa mejor el tarea.id."
+3. ¿La función de eliminar es inmutable?
+   - ❌ Si usó .splice(): "⚠️ No uses .splice(), ya que modifica el array original. Usa .filter() para crear uno nuevo."
+4. ¿Usó la forma funcional en el set? (prev => ...)
+   - 💡 Si no lo hizo: "Tip: Cuando el nuevo estado depende del anterior (como en una lista), es más seguro usar setTareas(prev => ...)."
 
-⚠️ ADVERTENCIAS CRÍTICAS:
-- Si usa key={index}, responde: "❌ Usar el index como key es mala práctica. React puede confundirse cuando la lista cambia. Usa key={tarea.id} en su lugar."
-- Si muta el array directamente (ej: tareas.splice()), advierte sobre inmutabilidad
-- Si NO usa la forma funcional de setState (prev =>), menciona que es mejor práctica
-
-Si todo está correcto:
-{ "aprobado": true, "mensaje": "¡Excelente! Entiendes cómo renderizar listas correctamente con keys únicas y cómo manipular arrays de forma inmutable usando filter()." }
-
-Si hay errores, explica específicamente qué está mal y da una pista constructiva sin dar la solución completa.
+MENSAJE DE APROBACIÓN:
+{ "aprobado": true, "mensaje": "✅ ¡Excelente! Has dominado el renderizado de listas. El uso de keys únicas y métodos inmutables es fundamental para el rendimiento en React." }
 `,
 
-  estimatedTime: 10,
-  tags: ["lists", "keys", "map", "filter", "state-management"],
+  estimatedTime: 12,
+  tags: ["arrays", "map", "keys", "inmutabilidad"],
 };

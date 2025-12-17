@@ -6,124 +6,111 @@ export const fetchingRobustoExercise: Exercise = {
   difficulty: "medium",
 
   objective:
-    "Aprenderás a realizar peticiones a una API usando useEffect y async/await, manejando correctamente los estados de carga, error y datos. Construirás un flujo de fetching realista y robusto, evitando uno de los errores más comunes en desarrolladores junior.",
+    "Aprenderás a realizar peticiones a APIs externas usando useEffect y async/await, gestionando correctamente los tres estados vitales de la asincronía: carga, error y éxito.",
 
   steps: [
-    "Importa useEffect y useState desde React",
-    "Crea tres estados obligatorios: loading, error y data",
-    "Usa useEffect para ejecutar la petición al montar el componente",
-    "Implementa una función async que haga fetch a una API pública",
-    "Maneja correctamente los estados de loading, error y data",
-    "Renderiza condicionalmente un spinner, un mensaje de error o la lista de datos",
+    "Importa los Hooks `useState` y `useEffect` directamente desde React.",
+    "Declara tres estados: `data` (para los resultados), `loading` (booleano) y `error` (para mensajes de fallo).",
+    "Crea una función asíncrona dentro de `useEffect` que realice la petición con `fetch`.",
+    "Implementa un bloque `try/catch/finally` para capturar cualquier problema de red o de la API.",
+    "Renderiza condicionalmente: una señal de carga, un mensaje si hay error, o la lista de datos si todo salió bien.",
   ],
 
   hints: [
     {
-      question: "¿Qué estados necesito para un fetching robusto?",
-      answer: `const [loading, setLoading] = useState(true);
-const [error, setError] = useState(null);
-const [data, setData] = useState([]);`,
+      question: "💡 Tip: ¿Cómo importar los hooks de forma moderna?",
+      answer:
+        "Evita usar `React.useState`. Es mejor práctica desestructurarlos en la importación:\n`import { useState, useEffect } from 'react';`",
     },
     {
-      question: "¿Cómo hago fetch con async/await?",
-      answer: `const fetchData = async () => {
-  const response = await fetch("https://rickandmortyapi.com/api/character");
-  const json = await response.json();
-  setData(json.results);
-};`,
+      question: "¿Por qué mi estado de error siempre es null?",
+      answer: `⚠️ Recuerda que el 'fetch' de JavaScript NO lanza un error automáticamente si la API responde un 404 o 500. Debes verificarlo manualmente:
+      
+if (!res.ok) throw new Error("No pudimos obtener los datos");`,
     },
     {
-      question: "¿Cómo manejo errores correctamente?",
-      answer: `try {
-  // fetch
-} catch (err) {
-  setError("Algo salió mal");
-} finally {
-  setLoading(false);
-}`,
+      question: "¿Para qué sirve el bloque 'finally'?",
+      answer:
+        "El bloque `finally` se ejecuta siempre, sin importar si la petición fue exitosa o falló. Es el lugar perfecto para poner `setLoading(false)`, evitando repetir código en el try y en el catch.",
     },
     {
-      question: "¿Dónde debo cambiar loading a false?",
-      answer: `Siempre en el finally.
-Así te aseguras de que loading se apague tanto si hay éxito como error.`,
+      question: "¿Cómo renderizo los datos de forma segura?",
+      answer: `Usa el operador && para asegurarte de que hay datos antes de hacer el .map():
+{data && data.map(item => <li key={item.id}>{item.name}</li>)}`,
     },
   ],
 
   theory: {
-    title: "Fetching de Datos en React",
+    title: "El Patrón Profesional de Fetching",
     content: `
-**El error más común en fetching**
-Muchos desarrolladores junior:
-- Solo manejan data
-- Olvidan loading
-- Ignoran el estado de error ❌
+**¿Por qué es importante?**
+En la web, las cosas fallan: el internet del usuario es lento, el servidor se cae o la API cambia. Si tu código no maneja estos estados, la aplicación se quedará "congelada" o mostrará una pantalla en blanco, frustrando al usuario.
 
-En producción esto causa:
-- Pantallas en blanco
-- Errores silenciosos
-- Mala UX
+**1. Técnicas comunes:**
+- **Async/Await:** Hace que el código asíncrono se lea como si fuera síncrono, mejorando la legibilidad.
+- **Try/Catch/Finally:** El estándar para capturar errores y limpiar estados (como apagar el spinner de carga).
+- **Verificación de res.ok:** Validar que el servidor respondió con un código exitoso (200-299).
 
-**Los 3 estados obligatorios**
-1. **loading** → mientras esperas la respuesta
-2. **error** → si algo falla (red, API, parsing)
-3. **data** → cuando todo sale bien
+**2. Anti-patrones comunes:**
+- ❌ **Ignorar el estado de error:** Si la API falla y no manejas el error, el usuario no sabrá qué pasó.
+- ❌ **Fetch fuera de useEffect:** Esto causará peticiones infinitas cada vez que el componente se re-renderice.
+- ⚠️ **Olvidar el array de dependencias:** Si dejas el \`[]\` vacío, solo carga al montar. Si lo olvidas, colapsarás la API con peticiones.
 
-**Flujo correcto**
-1. loading = true
-2. Intentas fetch
-3. Si éxito → setData
-4. Si falla → setError
-5. finally → loading = false
+**3. Ventajas de las buenas prácticas:**
+- **Manejo de UX:** El usuario siempre recibe feedback (sabe que está cargando o que algo falló).
+- **Código Robusto:** Tu aplicación no se rompe ("crash") ante errores inesperados de red.
+- **Mantenibilidad:** Separar los estados hace que sea fácil añadir spinners o modales de error personalizados.
 
-**Ejemplo de patrón robusto**
+**4. Ejemplos de código:**
+
+✅ **Correcto (Patrón Robusto):**
 \`\`\`javascript
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(url);
-      if (!res.ok) throw new Error("Error en la API");
-      const data = await res.json();
-      setData(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchData();
-}, []);
+try {
+  setLoading(true);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Error!");
+  const json = await res.json();
+  setData(json);
+} catch (err) {
+  setError(err.message);
+} finally {
+  setLoading(false);
+}
 \`\`\`
 
-⚠️ Regla de oro:
-> Si haces fetch sin estado de error, tu código está incompleto.
+❌ **Incorrecto (Inseguro):**
+\`\`\`javascript
+useEffect(() => {
+  fetch(url).then(res => res.json()).then(data => setData(data));
+  // ❌ No hay loading, no hay catch de errores
+}, []);
+\`\`\`
 `,
     examples: [
-      "// Estado de loading\nif (loading) return <Spinner />;",
-      "// Estado de error\nif (error) return <ErrorMessage />;",
-      "// Renderizar data\ndata.map(item => <div>{item.name}</div>)",
+      "// Renderizado condicional triple\nif (loading) return <p>Cargando...</p>;\nif (error) return <p>Error: {error}</p>;\nreturn <ul>{data.map(i => <li key={i.id}>{i.name}</li>)}</ul>",
     ],
   },
 
   files: {
-    "App.js": `import React, { useEffect, useState } from 'react';
+    "App.js": `import React, { useState, useEffect } from 'react';
 
 export default function FetchingRobusto() {
-  // Estados obligatorios: loading, error, data
-  
+  // 1. Define aquí tus 3 estados: data, loading y error
+
   useEffect(() => {
-    // Aquí va tu lógica de fetching
+    // 2. Crea tu función asíncrona para el fetch
+    // API recomendada: https://rickandmortyapi.com/api/character
+    
   }, []);
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
-      <h1>Personajes</h1>
+    <div style={{ padding: '20px', fontFamily: 'sans-serif', textAlign: 'center' }}>
+      <h1>Personajes de Rick & Morty</h1>
 
-      {/* 
-        Si loading → mostrar spinner
-        Si error → mostrar mensaje
-        Si data → renderizar lista
+      {/* 3. Renderizado condicional:
+        - Si loading es true, muestra un mensaje de carga.
+        - Si error existe, muestra el mensaje de error en rojo.
+        - Si hay datos, usa .map() para mostrar los nombres.
       */}
     </div>
   );
@@ -131,37 +118,23 @@ export default function FetchingRobusto() {
   },
 
   aiInstruction: `
-El estudiante debe implementar un fetching de datos robusto usando useEffect y async/await.
+El estudiante debe realizar un fetching de datos completo y seguro.
 
-Verifica estrictamente que:
-1. Existan los estados loading, error y data
-2. loading inicie en true
-3. La petición se haga dentro de useEffect
-4. Se use async/await correctamente
-5. Exista manejo de errores con try/catch
-6. loading se apague en un finally
-7. El renderizado sea condicional:
-   - loading → spinner o texto de carga
-   - error → mensaje de error visible
-   - data → lista renderizada con .map()
+LISTA DE CHEQUEO:
+1. ¿Declaró los tres estados (data, loading, error)?
+2. ¿Usó useEffect con un array de dependencias vacío []?
+3. ¿Implementó async/await con try/catch?
+4. ¿Validó res.ok antes de transformar a JSON?
+   - ⚠️ Si no lo hizo: "💡 Tip: 'fetch' no lanza error en respuestas 404 o 500. Debes verificar if(!res.ok) y lanzar un error manualmente."
+5. ¿Usó finally para hacer setLoading(false)?
+   - ❌ Si lo hace dentro de try y catch por separado: "💡 Puedes simplificar tu código usando un bloque 'finally' para apagar el estado de carga una sola vez."
+6. ¿Renderiza condicionalmente el error?
+   - ❌ Si solo hace console.error: "⚠️ El usuario no puede ver la consola. Debes guardar el error en el estado y mostrarlo en la interfaz."
 
-❌ FALLA AUTOMÁTICA si:
-- No existe estado de error
-- El error se maneja solo con console.error
-- loading nunca se apaga
-- Se hace fetch fuera de useEffect
-
-Si todo está correcto:
-{
-  "aprobado": true,
-  "mensaje": "¡Excelente! Implementaste un fetching robusto con manejo correcto de loading, error y data. Este es un patrón de nivel mid que se usa en producción."
-}
-
-Si hay errores:
-Explica qué estado falta o está mal manejado y por qué eso es un problema real en aplicaciones.
-Da una pista clara sin escribir el código completo.
+MENSAJE DE APROBACIÓN:
+{ "aprobado": true, "mensaje": "✅ ¡Espectacular! Has implementado el patrón de fetching que se usa en aplicaciones reales de alto nivel. Manejar los estados de carga y error es fundamental para una buena experiencia de usuario." }
 `,
 
   estimatedTime: 15,
-  tags: ["hooks", "useEffect", "fetch", "async-await", "error-handling"],
+  tags: ["fetching", "async-await", "useEffect", "error-handling"],
 };

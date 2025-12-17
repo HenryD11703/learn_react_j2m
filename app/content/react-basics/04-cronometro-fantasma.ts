@@ -6,77 +6,102 @@ export const cronometroFantasmaExercise: Exercise = {
   difficulty: "medium",
 
   objective:
-    "Los efectos secundarios (side-effects) como timers o suscripciones deben limpiarse cuando un componente muere. Si no lo haces, crearás 'Memory Leaks' que ralentizan la aplicación.",
+    "Aprenderás a gestionar el ciclo de vida de los efectos secundarios (side-effects) y a utilizar funciones de limpieza para prevenir fugas de memoria (Memory Leaks).",
 
   steps: [
-    "Dentro del `useEffect`, crea un `setInterval` que aumente los segundos cada 1000ms.",
-    "Agrega un `console.log('Tic...')` dentro del intervalo para ver cuándo se ejecuta.",
-    "Prueba tu app: Haz click en 'Ocultar Cronómetro'. Abre la consola. ¿Siguen saliendo los logs? 👻 Eso es un Memory Leak.",
-    "Arréglalo retornando una función de limpieza (`cleanup function`) que use `clearInterval`.",
+    "Crea un estado para los segundos iniciando en 0.",
+    "Implementa un `useEffect` que inicie un intervalo con `setInterval` cada 1000ms.",
+    "Dentro del intervalo, utiliza un `console.log('Tic...')` para observar el comportamiento en la consola.",
+    "Actualiza el estado de los segundos usando la forma funcional de `setSegundos`.",
+    "Retorna una función de limpieza que detenga el intervalo cuando el componente se desmonte.",
   ],
 
   hints: [
     {
-      question: "¿Cómo uso setInterval dentro de useEffect?",
-      answer: `useEffect(() => {
-  const id = setInterval(() => {
-    setSegundos(s => s + 1);
-  }, 1000);
-}, []); // Array vacío para que corra solo al montar`,
-    },
-    {
-      question: "¿Por qué siguen saliendo logs cuando oculto el componente?",
-      answer:
-        "Porque React desmontó el componente visualmente, pero el proceso de JavaScript del intervalo sigue vivo en la memoria del navegador. Nadie le dijo que parara.",
-    },
-    {
-      question: "¿Cómo detengo el intervalo al desmontar?",
-      answer: `useEffect(() => {
-  const id = setInterval(...);
+      question: "¿Cómo guardo la referencia del intervalo?",
+      answer: `Para poder limpiar un intervalo, primero debes guardarlo en una constante:
+      
+const intervalId = setInterval(() => { ... }, 1000);
 
-  // Esta función se ejecuta cuando el componente muere
-  return () => {
-    clearInterval(id);
-    console.log("Limpiando...");
-  };
-}, []);`,
+// Luego puedes usar: clearInterval(intervalId);`,
+    },
+    {
+      question: "¿Por qué el log sigue apareciendo si ya no veo el componente?",
+      answer:
+        "⚠️ ¡Ese es el fantasma! React quitó el componente de la pantalla, pero el proceso de `setInterval` sigue vivo en el navegador porque nunca le dijiste que se detuviera. Esto consume memoria y CPU.",
+    },
+    {
+      question: "¿Cómo se ve exactamente la función de limpieza?",
+      answer: `Dentro del \`useEffect\`, debes retornar una función flecha:
+      
+return () => {
+  console.log("Limpiando...");
+  clearInterval(intervalId);
+};`,
+    },
+    {
+      question: "💡 Tip: ¿Importación o React.useEffect?",
+      answer:
+        "Es mucho más limpio importar el hook directamente: `import { useEffect } from 'react';` en lugar de usar `React.useEffect`. Esto ayuda a que tu código sea más legible y estandarizado.",
     },
   ],
 
   theory: {
-    title: "Ciclo de Vida y Cleanup",
+    title: "Ciclo de Vida y Limpieza de Efectos",
     content: `
-**El ciclo de vida de un Efecto:**
-1. **Mount:** El componente aparece -> Se ejecuta el cuerpo del \`useEffect\`.
-2. **Update:** Si las dependencias cambian -> Se limpia el anterior y se ejecuta el nuevo.
-3. **Unmount:** El componente desaparece -> **Se ejecuta lo que retornaste en el useEffect.**
+**¿Por qué es importante?**
+Cuando conectas tu componente al mundo exterior (APIs, timers, suscripciones), esa conexión no se rompe sola. Si el componente desaparece pero la conexión sigue activa, creas un **Memory Leak**. Esto hace que tu app se vuelva pesada y lenta con el tiempo.
 
-**La función de limpieza (Cleanup Function):**
-React espera que \`useEffect\` retorne una **función** (o nada). Si retornas una función, React la guardará y la llamará justo antes de eliminar el componente.
+**1. Técnicas comunes:**
+- **La Función de Limpieza:** Es el código que colocas en el \`return\` de tu \`useEffect\`.
+- **Efectos controlados:** Usar el arreglo de dependencias \`[]\` para asegurar que el intervalo solo se cree una vez al montar.
+- **Forma funcional de setEstado:** Usar \`s => s + 1\` para no depender de la variable externa y evitar re-ejecutar el efecto innecesariamente.
 
-**Errores comunes:**
-❌ \`return clearInterval(id)\` -> Esto ejecuta la limpieza INMEDIATAMENTE al montar.
-✅ \`return () => clearInterval(id)\` -> Esto entrega una función para ejecutar DESPUÉS.
+**2. Anti-patrones comunes:**
+- ❌ **Olvidar el cleanup:** Dejar intervalos o event listeners activos después de desmontar.
+- ❌ **Ejecución inmediata:** Hacer \`return clearInterval(id)\` (ejecuta el clear al instante) en lugar de \`return () => clearInterval(id)\` (guarda la función para después).
+- ⚠️ **Múltiples timers:** No limpiar el efecto antes de que se cree uno nuevo si las dependencias cambian.
+
+**3. Ventajas de las buenas prácticas:**
+- Aplicaciones más rápidas y fluidas.
+- Evitas bugs extraños donde el estado se intenta actualizar en un componente que ya no existe.
+- Código profesional y predecible.
+
+**4. Ejemplos de código:**
+
+✅ **Correcto (Limpieza adecuada):**
+\`\`\`javascript
+useEffect(() => {
+  const timer = setInterval(() => {}, 1000);
+  return () => clearInterval(timer);
+}, []);
+\`\`\`
+
+❌ **Incorrecto (Fuga de memoria):**
+\`\`\`javascript
+useEffect(() => {
+  setInterval(() => {}, 1000); // ❌ Nunca se detendrá
+}, []);
+\`\`\`
 `,
     examples: [
-      "// Event Listeners\nuseEffect(() => {\n  window.addEventListener('resize', handle);\n  return () => window.removeEventListener('resize', handle);\n}, [])",
-      "// Timers\nuseEffect(() => {\n  const timer = setTimeout(...);\n  return () => clearTimeout(timer);\n}, [])",
+      "// Limpiando Event Listeners\nuseEffect(() => {\n  window.addEventListener('scroll', handle);\n  return () => window.removeEventListener('scroll', handle);\n}, []);",
     ],
   },
 
-  // El código inicial incluye el "Entorno de Prueba" (App) y el componente a arreglar
   files: {
     "App.js": `import React, { useState, useEffect } from 'react';
 
-// 👻 ESTE ES EL COMPONENTE QUE DEBES ARREGLAR
+// ESTE ES EL COMPONENTE QUE DEBES ARREGLAR
 function Cronometro() {
   const [segundos, setSegundos] = useState(0);
 
   useEffect(() => {
-    // 1. Crea tu intervalo aquí (setInterval)
-    // 2. No olvides el console.log para ver el fantasma
+    // 💡 Tip: Usa const id = setInterval(...)
     
-    // 3. RETORNA la función de limpieza
+    // 1. Crea tu intervalo aquí
+    
+    // 2. RETORNA la función de limpieza () => clearInterval(id)
   }, []);
 
   return (
@@ -87,51 +112,50 @@ function Cronometro() {
   );
 }
 
-// 🛑 NO TOQUES ESTE COMPONENTE (Es para probar tu código)
 export default function App() {
   const [mostrar, setMostrar] = useState(true);
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
+    <div style={{ padding: '20px', fontFamily: 'sans-serif', textAlign: 'center' }}>
       <h1>El Cronómetro Fantasma</h1>
       
       <button 
         onClick={() => setMostrar(!mostrar)}
-        style={{ background: mostrar ? '#ff4444' : '#44ff44', color: 'black', border: 'none', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' }}
+        style={{ 
+          background: mostrar ? '#ff4444' : '#44ff44', 
+          color: 'white', 
+          border: 'none', 
+          padding: '10px 20px', 
+          borderRadius: '5px', 
+          cursor: 'pointer' 
+        }}
       >
-        {mostrar ? "Ocultar Cronómetro (Desmontar)" : "Mostrar Cronómetro (Montar)"}
+        {mostrar ? "Ocultar Cronómetro" : "Mostrar Cronómetro"}
       </button>
 
-      {/* Aquí montamos/desmontamos tu componente */}
       {mostrar && <Cronometro />}
-      
-      {!mostrar && <p>El componente se ha ido... ¿pero el intervalo sigue ahí?</p>}
+      {!mostrar && <p style={{marginTop: '20px'}}>Componente desmontado. ¿Sigue el log en la consola? 👻</p>}
     </div>
   );
 }`,
   },
 
   aiInstruction: `
-El estudiante debe implementar un cronómetro que se limpie correctamente al desmontar.
+El estudiante debe implementar un intervalo y su respectiva limpieza.
 
-Analiza el código del componente 'Cronometro':
+LISTA DE CHEQUEO:
+1. ¿Usó setInterval dentro de useEffect?
+2. ¿Usó la forma funcional setSegundos(s => s + 1)?
+   - 💡 Si no lo hizo: "Tip: Usa la forma funcional setSegundos(s => s + 1) para evitar problemas con las dependencias del useEffect."
+3. ¿Retornó una función de limpieza? 
+   - ❌ Si falta el return: "⚠️ ¡Cuidado! Has creado el intervalo pero no lo estás limpiando. Debes retornar una función que ejecute clearInterval."
+4. ¿Usó la sintaxis de retorno correcta? 
+   - ❌ Si hizo return clearInterval(id): "⚠️ Estás ejecutando la limpieza inmediatamente. El return debe devolver una FUNCIÓN: return () => clearInterval(id)."
 
-1. **Uso de setInterval:** ¿Creó el intervalo correctamente?
-2. **Actualización del estado:** ¿Usa la forma funcional \`setSegundos(s => s + 1)\`? (Es lo ideal, aunque \`segundos + 1\` es aceptable si agregó la dependencia, pero mejor si usa callback).
-3. **CRÍTICO - Cleanup:** ¿Retorna una función dentro del useEffect?
-   - Debe ser: \`return () => clearInterval(id)\`
-   - Verifica que haya capturado el ID del intervalo en una variable (const id = setInterval...).
-
-Si falta el return o el clearInterval:
-Responde: "❌ ¡Cuidado! Creaste el intervalo pero no lo estás limpiando. Si ocultas el componente, el timer seguirá corriendo en la memoria. Necesitas retornar una función de limpieza en el useEffect."
-
-Si ejecuta la limpieza mal (ej: return clearInterval(id) sin función flecha):
-Responde: "❌ Error de sintaxis en el cleanup. Estás ejecutando el clear inmediatamente. Debes retornar una FUNCIÓN que React pueda llamar después: return () => clearInterval(id)."
-
-Si todo está bien:
-{ "aprobado": true, "mensaje": "¡Excelente! Has dominado el ciclo de vida de los efectos. Al limpiar el intervalo, previenes memory leaks y bugs inesperados." }
+MENSAJE DE APROBACIÓN:
+{ "aprobado": true, "mensaje": "✅ ¡Excelente! Has exorcizado al fantasma. Entender cuándo y cómo limpiar tus efectos es vital para construir aplicaciones de alto rendimiento." }
 `,
 
   estimatedTime: 15,
-  tags: ["useEffect", "cleanup", "memory-leaks", "setInterval"],
+  tags: ["useEffect", "cleanup", "memory-leaks"],
 };
