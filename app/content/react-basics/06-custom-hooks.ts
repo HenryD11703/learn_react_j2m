@@ -58,7 +58,6 @@ Un componente de React debe enfocarse en **CÓMO se ve** la interfaz, no en **C�
 `,
   },
 
-  // ✅ AQUÍ ESTÁ LA MAGIA MULTI-ARCHIVO
   files: {
     "/App.js": `import React, { useState, useEffect } from 'react';
 import './styles.css';
@@ -106,7 +105,6 @@ export default function App() {
   );
 }`,
 
-    // El archivo vacío (o plantilla) para que el estudiante trabaje
     "/hooks/useFetch.js": `import { useState, useEffect } from 'react';
 
 // Tu misión: Mueve la lógica aquí
@@ -118,7 +116,6 @@ export function useFetch(url) {
   return {}; 
 }`,
 
-    // Estilos para que se vea bonito (y no distraiga al estudiante)
     "/styles.css": `
       .container { padding: 20px; font-family: sans-serif; }
       .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; }

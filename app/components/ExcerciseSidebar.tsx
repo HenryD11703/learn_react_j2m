@@ -10,7 +10,6 @@ import {
   BookOpen,
   Code,
   Eye,
-  Save,
   FileText,
 } from "lucide-react";
 
