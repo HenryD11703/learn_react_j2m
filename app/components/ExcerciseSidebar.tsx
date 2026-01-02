@@ -11,6 +11,8 @@ import {
   Code,
   Eye,
   FileText,
+  CheckCircle,
+  XCircle,
 } from "lucide-react";
 
 interface Props {
@@ -157,11 +159,59 @@ export default function ExerciseSidebar({ exercise }: Props) {
             </>
           ) : (
             exercise.theory && (
-              <div className="space-y-4">
-                <h3 className="text-lg font-bold text-white">
+              <div className="space-y-6">
+                <h3 className="text-xl font-bold text-white">
                   {exercise.theory.title}
                 </h3>
-                <MarkdownRenderer content={exercise.theory.content} />
+
+                {exercise.theory.introduction && (
+                  <div className="text-gray-300 leading-relaxed">
+                    <MarkdownRenderer content={exercise.theory.introduction} />
+                  </div>
+                )}
+
+                {exercise.theory.goodPractices &&
+                  exercise.theory.goodPractices.length > 0 && (
+                    <div className="space-y-3">
+                      <h4 className="text-sm font-semibold text-emerald-400 flex items-center gap-2">
+                        <CheckCircle className="w-5 h-5" />
+                        Buenas Prácticas
+                      </h4>
+                      <ul className="space-y-2">
+                        {exercise.theory.goodPractices.map((practice, index) => (
+                          <li
+                            key={index}
+                            className="text-sm text-gray-300 flex items-start gap-3 p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/10"
+                          >
+                            <span className="mt-1 w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0" />
+                            <MarkdownRenderer content={practice} />
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                {exercise.theory.badPractices &&
+                  exercise.theory.badPractices.length > 0 && (
+                    <div className="space-y-3">
+                      <h4 className="text-sm font-semibold text-rose-400 flex items-center gap-2">
+                        <XCircle className="w-5 h-5" />
+                        A Evitar
+                      </h4>
+                      <ul className="space-y-2">
+                        {exercise.theory.badPractices.map((practice, index) => (
+                          <li
+                            key={index}
+                            className="text-sm text-gray-300 flex items-start gap-3 p-3 rounded-lg bg-rose-500/5 border border-rose-500/10"
+                          >
+                            <span className="mt-1 w-1.5 h-1.5 rounded-full bg-rose-500 flex-shrink-0" />
+                            <MarkdownRenderer content={practice} />
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
                 {exercise.theory.examples && (
                   <div className="mt-6 space-y-3">
                     <h4 className="text-sm font-semibold text-white flex items-center gap-2">

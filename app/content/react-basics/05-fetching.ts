@@ -42,50 +42,18 @@ if (!res.ok) throw new Error("No pudimos obtener los datos");`,
 
   theory: {
     title: "El Patrón Profesional de Fetching",
-    content: `
-**¿Por qué es importante?**
-En la web, las cosas fallan: el internet del usuario es lento, el servidor se cae o la API cambia. Si tu código no maneja estos estados, la aplicación se quedará "congelada" o mostrará una pantalla en blanco, frustrando al usuario.
-
-**1. Técnicas comunes:**
-- **Async/Await:** Hace que el código asíncrono se lea como si fuera síncrono, mejorando la legibilidad.
-- **Try/Catch/Finally:** El estándar para capturar errores y limpiar estados (como apagar el spinner de carga).
-- **Verificación de res.ok:** Validar que el servidor respondió con un código exitoso (200-299).
-
-**2. Anti-patrones comunes:**
-- ❌ **Ignorar el estado de error:** Si la API falla y no manejas el error, el usuario no sabrá qué pasó.
-- ❌ **Fetch fuera de useEffect:** Esto causará peticiones infinitas cada vez que el componente se re-renderice.
-- ⚠️ **Olvidar el array de dependencias:** Si dejas el \`[]\` vacío, solo carga al montar. Si lo olvidas, colapsarás la API con peticiones.
-
-**3. Ventajas de las buenas prácticas:**
-- **Manejo de UX:** El usuario siempre recibe feedback (sabe que está cargando o que algo falló).
-- **Código Robusto:** Tu aplicación no se rompe ("crash") ante errores inesperados de red.
-- **Mantenibilidad:** Separar los estados hace que sea fácil añadir spinners o modales de error personalizados.
-
-**4. Ejemplos de código:**
-
-✅ **Correcto (Patrón Robusto):**
-\`\`\`javascript
-try {
-  setLoading(true);
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("Error!");
-  const json = await res.json();
-  setData(json);
-} catch (err) {
-  setError(err.message);
-} finally {
-  setLoading(false);
-}
-\`\`\`
-
-❌ **Incorrecto (Inseguro):**
-\`\`\`javascript
-useEffect(() => {
-  fetch(url).then(res => res.json()).then(data => setData(data));
-  // ❌ No hay loading, no hay catch de errores
-}, []);
-\`\`\`
-`,
+    introduction:
+      "En la web, las cosas fallan: el internet del usuario es lento, el servidor se cae o la API cambia. Si tu código no maneja estos estados, la aplicación se quedará 'congelada' o mostrará una pantalla en blanco, frustrando al usuario.",
+    goodPractices: [
+      "Async/Await: Hace que el código asíncrono se lea como si fuera síncrono, mejorando la legibilidad.",
+      "Try/Catch/Finally: El estándar para capturar errores y limpiar estados (como apagar el spinner de carga).",
+      "Verificación de res.ok: Validar que el servidor respondió con un código exitoso (200-299).",
+    ],
+    badPractices: [
+      "Ignorar el estado de error: Si la API falla y no manejas el error, el usuario no sabrá qué pasó.",
+      "Fetch fuera de useEffect: Esto causará peticiones infinitas cada vez que el componente se re-renderice.",
+      "Olvidar el array de dependencias: Si dejas el `[]` vacío, solo carga al montar. Si lo olvidas, colapsarás la API con peticiones.",
+    ],
     examples: [
       "// Renderizado condicional triple\nif (loading) return <p>Cargando...</p>;\nif (error) return <p>Error: {error}</p>;\nreturn <ul>{data.map(i => <li key={i.id}>{i.name}</li>)}</ul>",
     ],
@@ -125,14 +93,11 @@ LISTA DE CHEQUEO:
 2. ¿Usó useEffect con un array de dependencias vacío []?
 3. ¿Implementó async/await con try/catch?
 4. ¿Validó res.ok antes de transformar a JSON?
-   - ⚠️ Si no lo hizo: "💡 Tip: 'fetch' no lanza error en respuestas 404 o 500. Debes verificar if(!res.ok) y lanzar un error manualmente."
+   - Si no lo hizo suggestTip: "Tip: 'fetch' no lanza error en respuestas 404 o 500. Debes verificar if(!res.ok) y lanzar un error manualmente."
 5. ¿Usó finally para hacer setLoading(false)?
-   - ❌ Si lo hace dentro de try y catch por separado: "💡 Puedes simplificar tu código usando un bloque 'finally' para apagar el estado de carga una sola vez."
+   - Si lo hace dentro de try y catch por separado: "Tip: Puedes simplificar tu código usando un bloque 'finally' para apagar el estado de carga una sola vez."
 6. ¿Renderiza condicionalmente el error?
-   - ❌ Si solo hace console.error: "⚠️ El usuario no puede ver la consola. Debes guardar el error en el estado y mostrarlo en la interfaz."
-
-MENSAJE DE APROBACIÓN:
-{ "aprobado": true, "mensaje": "✅ ¡Espectacular! Has implementado el patrón de fetching que se usa en aplicaciones reales de alto nivel. Manejar los estados de carga y error es fundamental para una buena experiencia de usuario." }
+   - Si solo hace console.error: "⚠️ El usuario no puede ver la consola. Debes guardar el error en el estado y mostrarlo en la interfaz."
 `,
 
   estimatedTime: 15,

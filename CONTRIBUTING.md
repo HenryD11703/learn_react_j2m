@@ -16,12 +16,11 @@ Copia el template desde `app/content/react-basics/template.ts` y rellena cada se
 - **steps**: Máximo 5-7 pasos, verbos en imperativo
 
 ### 3. Teoría
-Sigue este orden cuando aplique:
-1. ¿Por qué es importante? (motivación)
-2. Conceptos clave
-3. Técnicas/patrones recomendados
-4. Anti-patrones comunes (con ❌)
-5. Ejemplos cortos
+Ahora la teoría es estructurada para estandarizar la UI:
+- **introduction**: Breve explicación del concepto (Markdown soportado).
+- **goodPractices**: Array de strings. Lista las mejores prácticas (se renderizan con ícono de check verde).
+- **badPractices**: Array de strings. Lista los errores comunes (se renderizan con ícono de error rojo).
+- **examples**: Snippets de código ilustrativos.
 
 ### 4. Hints
 - Pregunta común del estudiante mientras hace el ejercicio
@@ -29,29 +28,10 @@ Sigue este orden cuando aplique:
 - Usa snippets, no soluciones completas
 
 ### 5. AI Instruction
-**Importante**: La validación NO es bloqueante actualmente, pero debe ser lo más precisa posible.
-- Sé específico en los criterios
-- Anticipa errores comunes
-- Da feedback constructivo
-- Formato de respuesta: `{ aprobado: boolean, mensaje: string }`
-
-### 6. Files
-```javascript
-files: {
-  "/App.js": `...`,              // Principal
-  "/hooks/useCustom.js": `...`,  // Subdirectorios
-  "/styles.css": `...`,          // Estilos
-}
-```
-
-## Iconos y Convenciones
-
-Utiliza estos iconos para mejorar la claridad:
-
-- ⚠️ Advertencias importantes
-- ❌ Código/patrón incorrecto
-- ✅ Código/patrón correcto
-- 💡 Tips opcionales o mejoras
+**Importante**: La validación usa un prompt del sistema estandarizado.
+- En tu `aiInstruction`, solo describe lo que el estudiante DEBE cumplir.
+- Provee una "Lista de Chequeo" clara para que la IA sepa qué buscar.
+- No incluyas instrucciones de formato JSON ni emojis, la API ya se encarga de eso.
 
 ## Checklist antes de PR
 

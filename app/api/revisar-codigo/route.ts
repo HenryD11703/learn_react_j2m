@@ -44,13 +44,17 @@ export async function POST(request: Request) {
     Formato exacto:
     {
       "aprobado": boolean,
-      "mensaje": string
+      "cosasBuenas": string[],  // 1-3 puntos fuertes del código
+      "cosasMalas": string[],   // 1-3 errores críticos o antipatrones
+      "revisar": string[],      // 1-3 sugerencias de mejora o advertencias
+      "mensajeGeneral": string  // Resumen muy breve de 1 línea
     }
 
-    El mensaje debe ser:
-    - Claro
-    - Técnico pero amigable
-    - Máximo 2 líneas
+    Instrucciones de llenado:
+    - "cosasBuenas": Elogia buenas prácticas encontradas.
+    - "cosasMalas": Errores de lógica, o violación de reglas del ejercicio.
+    - "revisar": Sugerencias para subir a nivel Mid (performance, legibilidad).
+    - "mensajeGeneral": Conclusión final.
     `;
 
     const completion = await groq.chat.completions.create({

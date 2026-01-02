@@ -45,46 +45,18 @@ const { data: products, loading } = useFetch(url);
 
   theory: {
     title: "La Magia de los Custom Hooks",
-    content: `
-**¿Por qué es importante?**
-En React, un componente debería tener una sola responsabilidad: **mostrar la interfaz**. Cuando un componente también se encarga de llamar a APIs, validar datos y manejar timers, se vuelve un "componente gordo" difícil de mantener. Los Custom Hooks nos permiten extraer esa lógica para que sea reutilizable.
-
-**1. Técnicas comunes:**
-- **Prefijo 'use':** React exige que todo Hook empiece con "use" (ej: \`useFetch\`) para aplicar las reglas de los Hooks.
-- **Retorno de objetos:** Devolver \`{ data, loading }\` es más flexible que devolver un arreglo, ya que permite desestructurar solo lo que necesitas.
-- **Hooks Genéricos:** Pasar parámetros como la \`url\` para que el Hook sirva para cualquier petición.
-
-**2. Anti-patrones comunes:**
-- ❌ **Lógica de UI en el Hook:** Un Hook no debe devolver JSX ni estilos, solo datos o funciones lógicas.
-- ❌ **Hooks condicionales:** Nunca llames a un Hook dentro de un \`if\` o un bucle.
-- ⚠️ **Acoplamiento:** No hagas que tu Hook dependa de un componente específico; hazlo lo más independiente posible.
-
-**3. Ventajas de las buenas prácticas:**
-- **Código DRY (Don't Repeat Yourself):** Si necesitas hacer fetch en otro lugar, ya tienes tu \`useFetch\` listo.
-- **Componentes 'Puros':** Tu \`App.js\` se vuelve mucho más corto y fácil de leer.
-- **Facilidad de Testing:** Puedes probar la lógica de la API sin tener que renderizar botones o imágenes.
-
-**4. Ejemplos de código:**
-
-✅ **Correcto (Separación de responsabilidades):**
-\`\`\`javascript
-// hooks/useFetch.js
-export function useFetch(url) {
-  const [data, setData] = useState(null);
-  // ... lógica ...
-  return { data };
-}
-\`\`\`
-
-❌ **Incorrecto (Lógica mezclada):**
-\`\`\`javascript
-function MiComponente() {
-  // ❌ 20 líneas de fetching mezcladas con el return
-  useEffect(() => { ... }, []);
-  return <div>{/* UI */}</div>;
-}
-\`\`\`
-`,
+    introduction:
+      "En React, un componente debería tener una sola responsabilidad: **mostrar la interfaz**. Cuando un componente también se encarga de llamar a APIs, validar datos y manejar timers, se vuelve un 'componente gordo' difícil de mantener. Los Custom Hooks nos permiten extraer esa lógica para que sea reutilizable.",
+    goodPractices: [
+      "Prefijo 'use': React exige que todo Hook empiece con 'use' (ej: `useFetch`) para aplicar las reglas de los Hooks.",
+      "Retorno de objetos: Devolver `{ data, loading }` es más flexible que devolver un arreglo, ya que permite desestructurar solo lo que necesitas.",
+      "Hooks Genéricos: Pasar parámetros como la `url` para que el Hook sirva para cualquier petición.",
+    ],
+    badPractices: [
+      "Lógica de UI en el Hook: Un Hook no debe devolver JSX ni estilos, solo datos o funciones lógicas.",
+      "Hooks condicionales: Nunca llames a un Hook dentro de un `if` o un bucle.",
+      "Acoplamiento: No hagas que tu Hook dependa de un componente específico; hazlo lo más independiente posible.",
+    ],
     examples: [
       "// Uso del custom hook\nconst { data, loading } = useFetch(API_URL);",
       "// Estructura mínima\nfunction useAlgo() {\n  useEffect(() => {}, []);\n  return resultado;\n}",
@@ -141,15 +113,12 @@ El estudiante debe refactorizar el componente extrayendo la lógica a un Custom 
 
 LISTA DE CHEQUEO:
 1. ¿El archivo 'App.js' está libre de useEffect y fetch?
-   - ❌ Si sigue teniendo lógica de fetch: "⚠️ Tu componente visual todavía sabe demasiado. Mueve el fetch y el useEffect al archivo useFetch.js."
+   - Si sigue teniendo lógica de fetch: "⚠️ Tu componente visual todavía sabe demasiado. Mueve el fetch y el useEffect al archivo useFetch.js."
 2. ¿El Hook 'useFetch' recibe la URL por parámetro?
-   - 💡 Si la URL está hardcodeada dentro del hook: "Tip: Haz tu hook más potente recibiendo la URL como parámetro, así podrás usarlo para cualquier API."
+   - Si la URL está hardcodeada dentro del hook: "Tip: Haz tu hook más potente recibiendo la URL como parámetro, así podrás usarlo para cualquier API."
 3. ¿El Hook retorna un objeto { data, loading, error }?
 4. ¿Se manejan correctamente los estados de error y carga dentro del hook?
 5. ¿Importó correctamente el hook en App.js?
-
-MENSAJE DE APROBACIÓN:
-{ "aprobado": true, "mensaje": "✅ ¡Magistral! Has aplicado el principio de 'Separación de Responsabilidades'. Tu componente visual ahora es mucho más limpio y tu lógica de fetching es reutilizable en cualquier parte de la app." }
 `,
 
   estimatedTime: 20,

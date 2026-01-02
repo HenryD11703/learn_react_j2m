@@ -49,42 +49,18 @@ const handleChange = (e) => {
 
   theory: {
     title: "Componentes Controlados vs. No Controlados",
-    content: `
-**¿Por qué es importante?**
-En la web tradicional, el DOM guarda el valor de los inputs. En React, queremos que **el Estado sea la única fuente de la verdad**. Esto nos permite validar datos al instante, formatear texto (como poner todo en mayúsculas) y deshabilitar botones de envío si falta información.
-
-**1. Técnicas comunes:**
-- **Estado de Objeto:** Agrupar campos relacionados en un solo objeto para evitar tener 10 \`useState\` diferentes.
-- **Handler Genérico:** Una sola función que maneja todos los cambios basándose en el atributo \`name\` del input.
-- **Input Controlado:** Sincronizar el \`value\` del input con el \`state\`.
-
-**2. Anti-patrones comunes:**
-- ❌ **Múltiples handlers:** Crear \`handleNombre\`, \`handleEmail\`, \`handlePassword\` por separado hace que el código crezca demasiado.
-- ❌ **Mutar el estado:** Intentar hacer \`formData.nombre = 'Juan'\`. Recuerda que en React el estado es de "solo lectura" hasta que usas la función \`set\`.
-- ⚠️ **Olvidar el preventDefault:** Si no lo usas, la página se recargará al enviar el formulario, perdiendo todo el estado de React.
-
-**3. Ventajas de las buenas prácticas:**
-- **Validación en tiempo real:** Puedes mostrar mensajes de error mientras el usuario escribe.
-- **Limpieza de datos:** Es fácil resetear el formulario volviendo el objeto a su estado inicial.
-- **Escalabilidad:** Añadir un nuevo campo al formulario solo requiere añadir una línea al objeto inicial y el input en el HTML.
-
-**4. Ejemplos de código:**
-
-✅ **Correcto (Handler Genérico):**
-\`\`\`javascript
-const [form, setForm] = useState({ user: '', pass: '' });
-
-const onChange = (e) => {
-  setForm({ ...form, [e.target.name]: e.target.value });
-};
-\`\`\`
-
-❌ **Incorrecto (Handler redundante):**
-\`\`\`javascript
-const [user, setUser] = useState('');
-// ... un handler por cada campo ...
-\`\`\`
-`,
+    introduction:
+      "En la web tradicional, el DOM guarda el valor de los inputs. En React, queremos que **el Estado sea la única fuente de la verdad**. Esto nos permite validar datos al instante, formatear texto (como poner todo en mayúsculas) y deshabilitar botones de envío si falta información.",
+    goodPractices: [
+      "Estado de Objeto: Agrupar campos relacionados en un solo objeto para evitar tener 10 `useState` diferentes.",
+      "Handler Genérico: Una sola función que maneja todos los cambios basándose en el atributo `name` del input.",
+      "Input Controlado: Sincronizar el `value` del input con el `state`.",
+    ],
+    badPractices: [
+      "Múltiples handlers: Crear `handleNombre`, `handleEmail`, `handlePassword` por separado hace que el código crezca demasiado.",
+      "Mutar el estado: Intentar hacer `formData.nombre = 'Juan'`. Recuerda que en React el estado es de 'solo lectura' hasta que usas la función `set`.",
+      "Olvidar el preventDefault: Si no lo usas, la página se recargará al enviar el formulario, perdiendo todo el estado de React.",
+    ],
     examples: [
       "// Prevenir recarga\nconst handleSubmit = (e) => { e.preventDefault(); console.log(form); };",
       "// Input controlado\n<input name='email' value={form.email} onChange={handleChange} />",
@@ -165,14 +141,11 @@ LISTA DE CHEQUEO:
 1. ¿Usó un solo useState con un objeto { nombre, email, rol }?
 2. ¿Los inputs tienen el atributo 'value' vinculado al estado?
 3. ¿Implementó una función handleChange que usa [e.target.name]?
-   - ❌ Si creó una función para cada input: "⚠️ Tu código es redundante. Intenta usar una sola función handleChange usando el atributo 'name' del input."
+   - Si creó una función para cada input: "⚠️ Tu código es redundante. Intenta usar una sola función handleChange usando el atributo 'name' del input."
 4. ¿Usó el operador spread (...prev o ...formData) al actualizar?
-   - ❌ Si sobrescribe el objeto completo: "⚠️ Estás borrando los otros campos al escribir. Usa el operador spread (...formData) para mantener los valores anteriores."
+   - Si sobrescribe el objeto completo: "⚠️ Estás borrando los otros campos al escribir. Usa el operador spread (...formData) para mantener los valores anteriores."
 5. ¿Usó e.preventDefault() en el submit?
-   - ❌ Si no lo hizo: "⚠️ Al enviar el formulario la página se recarga. Usa e.preventDefault() para manejar el envío con React."
-
-MENSAJE DE APROBACIÓN:
-{ "aprobado": true, "mensaje": "✅ ¡Excelente! Has dominado los formularios controlados. Usar un solo objeto de estado y un handler genérico es la forma más limpia y profesional de manejar entradas de datos en React." }
+   - Si no lo hizo: "⚠️ Al enviar el formulario la página se recarga. Usa e.preventDefault() para manejar el envío con React."
 `,
 
   estimatedTime: 15,

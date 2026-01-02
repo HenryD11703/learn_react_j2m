@@ -40,40 +40,18 @@ Luego, dentro del hijo, la usas en el evento:
 
   theory: {
     title: "Compartiendo Datos: Elevación de Estado",
-    content: `
-**¿Por qué es importante?**
-A menudo, varios componentes necesitan reflejar los mismos datos cambiantes. Si cada uno guarda su propia copia, la interfaz se desincroniza. "Elevar el estado" garantiza que haya una **única fuente de la verdad**.
-
-**1. Técnicas comunes:**
-- **Identificar el ancestro común:** Buscar el componente padre más cercano que envuelva a todos los hijos que necesitan los datos.
-- **Props de función:** Pasar funciones desde el padre para que los hijos puedan "avisar" cuando algo cambia.
-- **Desestructuración de Props:** Recibir los datos de forma limpia en los hijos para mantener el código legible.
-
-**2. Anti-patrones comunes:**
-- ❌ **Duplicar el estado:** Crear un \`useState\` en cada hermano con la misma información. Esto causa que uno se actualice y el otro no.
-- ❌ **Intentar usar el DOM:** Usar \`document.getElementById\` para leer el valor de otro componente. ¡Nunca hagas esto en React!
-- ⚠️ **Elevar demasiado el estado:** No subas el estado hasta el nivel más alto de la app (como \`App.js\`) si solo lo usan dos componentes pequeños en una esquina. Mantén el estado lo más cerca posible de donde se usa.
-
-**3. Ventajas de las buenas prácticas:**
-- **Sincronización total:** Si el dato cambia en el padre, todos los hijos se actualizan al instante.
-- **Facilidad de depuración:** Solo hay un lugar donde el estado puede estar fallando.
-- **Componentes tontos (Presentacionales):** Tus componentes hijos se vuelven más simples porque solo muestran lo que el padre les dice.
-
-**4. Ejemplos de código:**
-
-✅ **Correcto (Estado en el Padre):**
-\`\`\`javascript
-function Padre() {
-  const [val, setVal] = useState("");
-  return (
-    <>
-      <HijoA valor={val} onChange={setVal} />
-      <HijoB valor={val} />
-    </>
-  );
-}
-\`\`\`
-`,
+    introduction:
+      "A menudo, varios componentes necesitan reflejar los mismos datos cambiantes. Si cada uno guarda su propia copia, la interfaz se desincroniza. 'Elevar el estado' garantiza que haya una **única fuente de la verdad**.",
+    goodPractices: [
+      "Identificar el ancestro común: Buscar el componente padre más cercano que envuelva a todos los hijos que necesitan los datos.",
+      "Props de función: Pasar funciones desde el padre para que los hijos puedan 'avisar' cuando algo cambia.",
+      "Desestructuración de Props: Recibir los datos de forma limpia en los hijos para mantener el código legible.",
+    ],
+    badPractices: [
+      "Duplicar el estado: Crear un `useState` en cada hermano con la misma información. Esto causa que uno se actualice y el otro no.",
+      "Intentar usar el DOM: Usar `document.getElementById` para leer el valor de otro componente. ¡Nunca hagas esto en React!",
+      "Elevar demasiado el estado: No subas el estado hasta el nivel más alto de la app (como `App.js`) si solo lo usan dos componentes pequeños en una esquina. Mantén el estado lo más cerca posible de donde se usa.",
+    ],
     examples: [
       "// Pasando el setter\n<Input onUpdate={(v) => setValue(v)} />",
       "// Recibiendo la prop\nconst Display = ({ texto }) => <p>{texto}</p>;",
@@ -135,11 +113,8 @@ LISTA DE CHEQUEO:
 2. ¿InputComponent recibe la función para actualizar el estado como prop?
 3. ¿DisplayComponent recibe el valor del estado como prop?
 4. ¿Se eliminó el estado local que estaba dentro de InputComponent?
-   - ❌ Si dejó el estado en el hijo y solo intentó pasarlo: "⚠️ Recuerda que los datos no pueden viajar de un hijo a otro directamente. El estado DEBE vivir en el componente App."
+   - Si dejó el estado en el hijo y solo intentó pasarlo: "⚠️ Recuerda que los datos no pueden viajar de un hijo a otro directamente. El estado DEBE vivir en el componente App."
 5. ¿La interfaz se actualiza correctamente al escribir?
-
-MENSAJE DE APROBACIÓN:
-{ "aprobado": true, "mensaje": "✅ ¡Excelente! Has comprendido la 'Elevación de Estado'. Este concepto es la base para crear interfaces complejas y sincronizadas en React sin necesidad de herramientas externas." }
 `,
 
   estimatedTime: 10,

@@ -44,43 +44,18 @@ const currentConfig = CONFIGS[status];
 
   theory: {
     title: "Renderizado Condicional Eficiente",
-    content: `
-**¿Por qué es importante?**
-En una aplicación real, las interfaces no son estáticas. Necesitas mostrar un mensaje de carga mientras llegan los datos, o un error si algo falla. El renderizado condicional permite que tu UI sea una "función de tu estado".
-
-**1. Técnicas comunes:**
-- **Operador Ternario (\`? :\`):** Ideal para elegir entre dos opciones (ej. botón de Login vs Logout).
-- **Cortocircuito (\`&&\`):** Perfecto para mostrar algo o nada.
-- **Objetos de Mapeo (Lookup Tables):** La técnica más limpia cuando tienes 3 o más estados posibles. Evita que tu código se llene de lógica compleja.
-
-**2. Anti-patrones comunes:**
-- ❌ **Usar \`if/else\` dentro del return:** JSX no permite sentencias de control de flujo directas, solo expresiones.
-- ⚠️ **Ternarios anidados:** Hacer \`condicion ? (otra ? a : b) : c\` es muy difícil de leer y mantener.
-- ❌ **Lógica pesada en el JSX:** No calcules datos complejos dentro de los paréntesis del \`return\`. Hazlo arriba y solo renderiza el resultado.
-
-**3. Ventajas de las buenas prácticas:**
-- **Escalabilidad:** Si mañana agregas un estado "warning", solo añades una línea a tu objeto de configuración.
-- **Legibilidad:** El JSX se mantiene corto y fácil de entender.
-- **Separación de intereses:** La "lógica" de qué color usa cada estado se separa de la "estructura" HTML.
-
-**4. Ejemplos de código:**
-
-✅ **Correcto (Objeto de Mapeo):**
-\`\`\`javascript
-const theme = { dark: '#000', light: '#fff' };
-
-return <div style={{ background: theme[mode] }}>Hola</div>;
-\`\`\`
-
-❌ **Incorrecto (Lógica en JSX):**
-\`\`\`javascript
-return (
-  <div style={{ background: mode === 'dark' ? '#000' : '#fff' }}>
-    Hola
-  </div>
-);
-\`\`\`
-`,
+    introduction:
+      "En una aplicación real, las interfaces no son estáticas. Necesitas mostrar un mensaje de carga mientras llegan los datos, o un error si algo falla. El renderizado condicional permite que tu UI sea una 'función de tu estado'.",
+    goodPractices: [
+      "Operador Ternario (`? :`): Ideal para elegir entre dos opciones (ej. botón de Login vs Logout).",
+      "Cortocircuito (`&&`): Perfecto para mostrar algo o nada.",
+      "Objetos de Mapeo (Lookup Tables): La técnica más limpia cuando tienes 3 o más estados posibles. Evita que tu código se llene de lógica compleja.",
+    ],
+    badPractices: [
+      "Usar `if/else` dentro del return: JSX no permite sentencias de control de flujo directas, solo expresiones.",
+      "Ternarios anidados: Hacer `condicion ? (otra ? a : b) : c` es muy difícil de leer y mantener.",
+      "Lógica pesada en el JSX: No calcules datos complejos dentro de los paréntesis del `return`. Hazlo arriba y solo renderiza el resultado.",
+    ],
     examples: [
       "// Operador &&\n{isAdmin && <AdminPanel />}",
       "// Ternario\n{isLogged ? <UserMenu /> : <LoginBtn />}",
@@ -127,14 +102,11 @@ El estudiante debe implementar un sistema de estados tipo semáforo.
 LISTA DE CHEQUEO:
 1. ¿El estado 'status' tiene valores correctos ('success', 'error', 'loading')?
 2. ¿Evitó usar múltiples if/else o switch dentro del return?
-   - ❌ Si usó muchos if/else: "⚠️ Tu código funciona, pero se está volviendo difícil de leer. Intenta usar un 'objeto de mapeo' para asociar cada estado con su configuración."
+   - Si usó muchos if/else, sugierelé usar un 'objeto de mapeo'.
 3. ¿El estilo de fondo es dinámico?
 4. ¿Los botones llaman a setStatus con el valor correcto?
 5. ¿Usa sintaxis limpia (acceso a objeto o &&)?
-   - ❌ Si intenta usar 'if' dentro de las llaves {}: "⚠️ Recuerda que dentro de JSX solo puedes usar expresiones (ternarios, &&, mapas). No puedes usar 'if' directamente."
-
-MENSAJE DE APROBACIÓN:
-{ "aprobado": true, "mensaje": "✅ ¡Brillante! Has utilizado un objeto de mapeo para gestionar los estados. Esta es la forma más profesional y escalable de manejar interfaces dinámicas en React." }
+   - Si intenta usar 'if' dentro de las llaves {}, explícale que JSX solo acepta expresiones.
 `,
 
   estimatedTime: 12,

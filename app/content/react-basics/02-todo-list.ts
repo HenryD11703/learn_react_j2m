@@ -46,41 +46,18 @@ setTareas(prevTareas => prevTareas.filter(...));`,
 
   theory: {
     title: "Renderizado de Listas y el Poder de las Keys",
-    content: `
-**¿Por qué es importante?**
-En las aplicaciones modernas, casi toda la información viene en forma de listas (mensajes, productos, tareas). React necesita una forma eficiente de saber qué elemento ha cambiado o desaparecido sin tener que volver a dibujar toda la lista desde cero.
-
-**1. Técnicas comunes:**
-- **El método .map():** Es el estándar en React para transformar datos en componentes.
-- **Keys únicas:** Usar identificadores estables (IDs de base de datos o UUIDs).
-- **Inmutabilidad:** Usar métodos que devuelven un nuevo arreglo como \`.filter()\` o \`.map()\` en lugar de modificar el original.
-
-**2. Anti-patrones comunes:**
-- ❌ **Usar el "index" como key:** Si la lista se reordena o se elimina un elemento, los índices cambian y React puede mezclar el estado de componentes diferentes.
-- ❌ **Mutar el estado:** Nunca uses \`push()\`, \`pop()\` o \`splice()\` directamente sobre el estado.
-- ⚠️ **Keys aleatorias:** Generar una key con \`Math.random()\` en el render causará que toda la lista se destruya y recree en cada actualización.
-
-**3. Ventajas de las buenas prácticas:**
-- **Rendimiento:** React solo actualiza el elemento exacto que cambió.
-- **Consistencia:** Evitas errores visuales donde el texto de una tarea se queda en el input de otra tras eliminar.
-- **Mantenibilidad:** Tu lógica de datos es predecible y fácil de seguir.
-
-**4. Ejemplos de código:**
-
-✅ **Correcto (Uso de ID estable):**
-\`\`\`javascript
-{items.map(item => (
-  <li key={item.id}>{item.name}</li>
-))}
-\`\`\`
-
-❌ **Incorrecto (Uso de Index):**
-\`\`\`javascript
-{items.map((item, index) => (
-  <li key={index}>{item.name}</li>
-))}
-\`\`\`
-`,
+    introduction:
+      "En las aplicaciones modernas, casi toda la información viene en forma de listas (mensajes, productos, tareas). React necesita una forma eficiente de saber qué elemento ha cambiado o desaparecido sin tener que volver a dibujar toda la lista desde cero.",
+    goodPractices: [
+      "El método .map(): Es el estándar en React para transformar datos en componentes.",
+      "Keys únicas: Usar identificadores estables (IDs de base de datos o UUIDs).",
+      "Inmutabilidad: Usar métodos que devuelven un nuevo arreglo como `.filter()` o `.map()` en lugar de modificar el original.",
+    ],
+    badPractices: [
+      "Usar el 'index' como key: Si la lista se reordena o se elimina un elemento, los índices cambian y React puede mezclar el estado de componentes diferentes.",
+      "Mutar el estado: Nunca uses `push()`, `pop()` o `splice()` directamente sobre el estado.",
+      "Keys aleatorias: Generar una key con `Math.random()` en el render causará que toda la lista se destruya y recree en cada actualización.",
+    ],
     examples: [
       "// Eliminar con filter\nsetItems(prev => prev.filter(i => i.id !== targetId));",
       "// Estructura de objeto recomendada\n{ id: crypto.randomUUID(), texto: 'Tarea' }",
@@ -119,14 +96,10 @@ El estudiante debe renderizar una lista dinámica y permitir la eliminación de 
 LISTA DE CHEQUEO:
 1. ¿Usa .map() para iterar sobre el array de tareas?
 2. ¿Asignó una key? 
-   - ❌ Si usó el index: "⚠️ Estás usando el index como key. Esto causará problemas de renderizado. Usa mejor el tarea.id."
+   - Si usó el index, explícale que esto causará problemas de renderizado.
 3. ¿La función de eliminar es inmutable?
-   - ❌ Si usó .splice(): "⚠️ No uses .splice(), ya que modifica el array original. Usa .filter() para crear uno nuevo."
+   - Si usó .splice(), dile que use .filter().
 4. ¿Usó la forma funcional en el set? (prev => ...)
-   - 💡 Si no lo hizo: "Tip: Cuando el nuevo estado depende del anterior (como en una lista), es más seguro usar setTareas(prev => ...)."
-
-MENSAJE DE APROBACIÓN:
-{ "aprobado": true, "mensaje": "✅ ¡Excelente! Has dominado el renderizado de listas. El uso de keys únicas y métodos inmutables es fundamental para el rendimiento en React." }
 `,
 
   estimatedTime: 12,

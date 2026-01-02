@@ -63,50 +63,17 @@ Luego accede: configs[status].mensaje`,
     // 5. Ejemplos de codigo
 
     // Si no se puede cumplir el patron por el tema del ejercicio esta bien, pero explicarlo
-    content: `
-**¿Por qué es importante?**
-El renderizado condicional te permite mostrar diferentes UI según el estado de tu aplicación. Es fundamental para crear experiencias dinámicas.
-
-**Técnicas de renderizado condicional:**
-
-1. **Operador Ternario (? :)**
-   - Perfecto para elegir entre dos opciones
-   - Sintaxis: condición ? valorSiTrue : valorSiFalse
-
-2. **Operador AND (&&)**
-   - Renderiza solo si la condición es true
-   - Sintaxis: condición && <Componente />
-   - ⚠️ Cuidado con valores falsy (0, '', false)
-
-3. **Objetos de Mapeo**
-   - Ideal para 3+ estados diferentes
-   - Evita "spaghetti code" con muchos if/else
-   - Más mantenible y escalable
-
-**Anti-patrón: If/Else en JSX**
-❌ Evita esto:
-\`\`\`javascript
-return (
-  <div>
-    {if (status === 'success') { // ❌ No funciona
-      return <Success />
-    }}
-  </div>
-)
-\`\`\`
-
-✅ Mejor:
-\`\`\`javascript
-const configs = { success: {...}, error: {...} };
-return <div>{configs[status].component}</div>
-\`\`\`
-
-**Ventajas del objeto de mapeo:**
-- Código más limpio y legible
-- Fácil de extender (agregar nuevos estados)
-- Separa lógica de presentación
-- Más fácil de testear
-`,
+    introduction:
+      "El renderizado condicional te permite mostrar diferentes UI según el estado de tu aplicación. Es fundamental para crear experiencias dinámicas.",
+    goodPractices: [
+      "Operador Ternario (? :): Perfecto para elegir entre dos opciones. Sintaxis: condición ? valorSiTrue : valorSiFalse",
+      "Operador AND (&&): Renderiza solo si la condición es true. Sintaxis: condición && <Componente />",
+      "Objetos de Mapeo: Ideal para 3+ estados diferentes. Evita 'spaghetti code' con muchos if/else.",
+    ],
+    badPractices: [
+      "If/Else en JSX: No puedes usar bloques if/else dentro del JSX. Usa ternarios o funciones auxiliares.",
+      "Anidación excesiva: Evita ternarios anidados (ternary hell). Mejor extrae la lógica a un componente o variable.",
+    ],
     examples: [
       "// Ternario\n{isOnline ? <GreenDot /> : <GrayDot />}",
       "// AND operator\n{showModal && <Modal />}",
@@ -116,65 +83,30 @@ return <div>{configs[status].component}</div>
   },
   // Esto son los archivos que el estudiante vera y editara
   // Puedes añadir multiples archivos si es necesario
-  // Si hay varios archivos, el principal debe ser "App.js"
-  // se puede especificar una ruta pero tiene que ser en la raiz /App.js
-  // se puede añadir otro archivo asi como
-  // "/hooks/useFetch.js": "codigo..."
-  // Al igual que estilos "/styles.css": "codigo..."
-  // Y al importarlos en App.js usar la ruta completa
-  // asi: import { useFetch } from "./hooks/useFetch";
   files: {
     "App.js": `import React, { useState } from 'react';
 
     export default function TodoList() {
-    // Crea aquí tu estado con un array de tareas
-    // Ejemplo: [{ id: 1, texto: "Aprender React" }, ...]
-    
-    // Función para eliminar tarea
-    const eliminarTarea = (id) => {
-        // Tu código aquí
-    };
+    // Tu código aquí
     
     return (
-        <div style={{ padding: '20px', fontFamily: 'sans-serif', maxWidth: '500px' }}>
-        <h1>Mi Lista de Tareas</h1>
-        <div style={{ marginTop: '20px' }}>
-            {/* Renderiza aquí tu lista de tareas usando .map() */}
-            {/* Cada tarea debe tener un botón de eliminar */}
-        </div>
+        <div>
+           <h1>Mi App</h1>
         </div>
     );
     }`,
   },
   // Esta es la instruccion para la IA que revisara el codigo del estudiante
-  // Actuaolmente es Llama-3 con Groq
-  // Aca especificas que debe revisar y como, advertencias y cosas que tiene que tener en cuenta
-  // Tratar a la IA como que fueras tu mismo con una lista de chequeo
+  // NO incluyas formato JSON ni emojis aqui, solo la logica de revision
   aiInstruction: `
-El estudiante debe crear un componente tipo semáforo con renderizado condicional limpio.
+El estudiante debe crear un componente con renderizado condicional limpio.
 
 Verifica que:
-1. Tenga un estado con al menos 3 valores posibles ('success', 'error', 'loading')
+1. Tenga un estado con al menos 3 valores posibles
 2. Use un objeto de mapeo/configuración en lugar de múltiples if/else
-3. El objeto contenga al menos: color, icono/emoji, y mensaje para cada estado
-4. Renderice dinámicamente el contenido basado en el estado actual
-5. Tenga botones para cambiar entre los diferentes estados
-6. Use renderizado condicional limpio (ternarios, &&, o acceso a objeto)
+3. Renderice dinámicamente el contenido
 
-⚠️ ADVERTENCIAS SOBRE PATRONES:
-- Si usa múltiples if/else dentro del return: "❌ Muchos if/else hacen el código difícil de leer. Considera usar un objeto de mapeo donde cada estado tenga su configuración."
-- Si intenta usar if dentro del JSX directamente: "❌ No puedes usar if/else directamente en JSX. Usa ternarios (condición ? a : b), operador && (condición && <Component />), o un objeto de mapeo."
-- Si no separa la configuración de la lógica de render: "💡 Tip: Define un objeto 'configs' fuera del return con toda la configuración de cada estado. Así tu JSX queda más limpio."
-
-✅ Bonus points si:
-- Usa template literals para clases dinámicas
-- Aplica estilos inline dinámicos correctamente
-- El código es limpio y mantenible
-
-Si todo está correcto:
-{ "aprobado": true, "mensaje": "¡Perfecto! Tu renderizado condicional es limpio y mantenible. Usas objetos de mapeo en lugar de if/else anidados, lo cual hace el código mucho más escalable." }
-
-Si hay errores, señala específicamente el patrón problemático y sugiere la alternativa correcta sin dar el código completo.
+Si hay errores de patrón (como if/else en JSX), señálalos claramente.
 `,
   // La respuesta de la IA se puede especificar aqui tambien, pero la IA siempre devolvera un JSON con la estructura
   // { aprobado: boolean, mensaje: string }

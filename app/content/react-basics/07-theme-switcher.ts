@@ -44,42 +44,18 @@ export const themeContextExercise: Exercise = {
 
   theory: {
     title: "Context API y el Fin del Prop Drilling",
-    content: `
-**¿Por qué es importante?**
-A medida que tu aplicación crece, pasar datos (como el usuario logueado o el idioma) a través de 5 o 6 niveles de componentes se vuelve una pesadilla de mantenimiento. Context API actúa como un "portal" que permite emitir datos desde un punto central (Provider) y recibirlos en cualquier parte del árbol (Consumer).
-
-**1. Técnicas comunes:**
-- **Provider (Proveedor):** El componente que envuelve a los demás y "emite" los datos.
-- **useContext:** El Hook que sintoniza esa emisión y nos da acceso directo a la información.
-- **Estado dentro del Provider:** Manejar un \`useState\` dentro del componente Provider para que cualquier cambio actualice a todos los componentes suscritos.
-
-**2. Anti-patrones comunes:**
-- ❌ **Abusar de Context:** No todo debe ser global. Si un dato solo lo usan dos componentes hermanos, es mejor usar props o levantar el estado.
-- ❌ **Prop Drilling innecesario:** Seguir pasando props manualmente cuando el dato es claramente global (como un tema visual).
-- ⚠️ **Objetos pesados en el Value:** Si pasas un objeto muy grande que cambia constantemente, podrías causar re-renders innecesarios en toda la app.
-
-**3. Ventajas de las buenas prácticas:**
-- **Código desacoplado:** Tus componentes intermedios no necesitan saber nada sobre datos que no les incumben.
-- **Mantenibilidad:** Si cambias la lógica del tema, solo tocas el archivo del Contexto.
-- **Legibilidad:** El árbol de componentes en \`App.js\` queda mucho más limpio.
-
-**4. Ejemplos de código:**
-
-✅ **Correcto (Uso de Context):**
-\`\`\`javascript
-// Componente profundo
-const theme = useContext(ThemeContext);
-return <div className={theme}>Contenido</div>;
-\`\`\`
-
-❌ **Incorrecto (Prop Drilling):**
-\`\`\`javascript
-// Componente intermedio que no usa el tema pero debe pasarlo
-function Layout({ theme, toggleTheme }) {
-  return <Navbar theme={theme} toggleTheme={toggleTheme} />;
-}
-\`\`\`
-`,
+    introduction:
+      "A medida que tu aplicación crece, pasar datos (como el usuario logueado o el idioma) a través de 5 o 6 niveles de componentes se vuelve una pesadilla de mantenimiento. Context API actúa como un 'portal' que permite emitir datos desde un punto central (Provider) y recibirlos en cualquier parte del árbol (Consumer).",
+    goodPractices: [
+      "Provider (Proveedor): El componente que envuelve a los demás y 'emite' los datos.",
+      "useContext: El Hook que sintoniza esa emisión y nos da acceso directo a la información.",
+      "Estado dentro del Provider: Manejar un `useState` dentro del componente Provider para que cualquier cambio actualice a todos los componentes suscritos.",
+    ],
+    badPractices: [
+      "Abusar de Context: No todo debe ser global. Si un dato solo lo usan dos componentes hermanos, es mejor usar props o levantar el estado.",
+      "Prop Drilling innecesario: Seguir pasando props manualmente cuando el dato es claramente global (como un tema visual).",
+      "Objetos pesados en el Value: Si pasas un objeto muy grande que cambia constantemente, podrías causar re-renders innecesarios en toda la app.",
+    ],
     examples: [
       "// Crear contexto\nconst UserContext = createContext();",
       "// Consumir contexto\nconst { user } = useContext(UserContext);",
@@ -168,13 +144,10 @@ LISTA DE CHEQUEO:
 1. ¿Creó el contexto con createContext() y lo exportó?
 2. ¿ThemeProvider tiene un estado (useState) y una función para cambiarlo?
 3. ¿Pasa un objeto { theme, toggleTheme } en la prop 'value' del Provider?
-   - ❌ Si olvidó la prop 'value': "⚠️ El Provider necesita la prop 'value' para emitir los datos a sus hijos."
+   - Si olvidó la prop 'value': "⚠️ El Provider necesita la prop 'value' para emitir los datos a sus hijos."
 4. ¿En App.js envolvió los componentes con <ThemeProvider>?
-   - ❌ Si pasó props manualmente (<Navbar theme={theme} />): "⚠️ ¡Eso es Prop Drilling! El objetivo es usar Context para NO pasar props manualmente en App.js."
+   - Si pasó props manualmente (<Navbar theme={theme} />): "⚠️ ¡Eso es Prop Drilling! El objetivo es usar Context para NO pasar props manualmente en App.js."
 5. ¿Usa useContext en Navbar.js y Content.js correctamente?
-
-MENSAJE DE APROBACIÓN:
-{ "aprobado": true, "mensaje": "✅ ¡Excelente! Has dominado Context API. Ahora puedes 'teletransportar' datos a través de tu aplicación, manteniendo tus componentes limpios y fáciles de mantener." }
 `,
 
   estimatedTime: 20,

@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Junior to Mid - React Training Platform
 
-## Getting Started
+![Project Banner Placeholder](public/banner-placeholder.png)
+*> Place a beautiful banner or screenshot of the Hero Section here.*
 
-First, run the development server:
+**Junior to Mid** es una plataforma interactiva diseñada para ayudar a desarrolladores React Junior a dar el salto al nivel Mid/Senior. A través de retos prácticos, feedback en tiempo real impulsado por IA y mejores prácticas de la industria.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Características
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Editor de Código en el Navegador**: Practica directamente sin configurar nada localmente, potenciado por Sandpack.
+- **Feedback con IA**: Recibe correcciones detalladas, análisis de buenas prácticas y detección de antipatrones al instante.
+- **Ruta de Aprendizaje**: Ejercicios progresivos desde `useState` básico hasta patrones de rendimiento avanzados.
+- **Diseño Moderno**: Una interfaz oscura, minimalista y libre de distracciones.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+![Exercise Editor Screenshot](public/editor-placeholder.png)
+*> Screenshot of the exercise editor interface showing code and instructions.*
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠️ Tecnologías
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Este proyecto está construido con un stack moderno y potente:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+- **Lenguaje**: [TypeScript](https://www.typescriptlang.org/)
+- **Estilos**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **Iconos**: [Lucide React](https://lucide.dev/)
+- **Editor Embebido**: [Sandpack](https://sandpack.codesandbox.io/)
+- **AI**: [Groq SDK](https://groq.com/) (Llama 3 70b)
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🏁 Comenzando
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Sigue estos pasos para correr el proyecto localmente:
+
+### Prerrequisitos
+
+- Node.js (v18 o superior)
+- Una API Key de [Groq](https://console.groq.com/)
+
+### Instalación
+
+1.  **Clona el repositorio:**
+    ```bash
+    git clone https://github.com/henryd11703/learn_react_j2m.git
+    cd learn_react_j2m
+    ```
+
+2.  **Instala las dependencias:**
+    ```bash
+    npm install
+    # o
+    pnpm install
+    ```
+
+3.  **Configura las variables de entorno:**
+    Crea un archivo `.env` en la raíz basado en el ejemplo:
+    ```bash
+    GROQ_API_KEY=tu_api_key_aqui
+    ```
+
+4.  **Inicia el servidor de desarrollo:**
+    ```bash
+    npm run dev
+    ```
+
+5.  **¡A codear!**
+    Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
+
+---
+
+## 🤝 Contribuyendo
+
+¡Las contribuciones son bienvenidas! Si tienes una idea para un nuevo ejercicio o una mejora en la plataforma:
+
+1.  Revisa [CONTRIBUTING.md](./CONTRIBUTING.md) para ver cómo crear nuevos ejercicios.
+2.  Haz un Fork del proyecto.
+3.  Crea tu Feature Branch (`git checkout -b feature/AmazingFeature`).
+4.  Haz Commit de tus cambios (`git commit -m 'Add some AmazingFeature'`).
+5.  Push a la Branch (`git push origin feature/AmazingFeature`).
+6.  Abre un Pull Request.
+
+---
+
+## 📄 Licencia
+
+Distribuido bajo la licencia MIT. Ver `LICENSE` para más información.
+
+---
+
+![Footer Placeholder](public/footer-placeholder.png)
+*> Optional: A nice footer image or signature.*

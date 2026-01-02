@@ -39,39 +39,18 @@ export const useReducerUndoExercise: Exercise = {
 
   theory: {
     title: "Máquinas de Estado y useReducer",
-    content: `
-**¿Por qué es importante?**
-Cuando el estado de un componente depende de su valor anterior de forma compleja (como un historial de 'deshacer'), usar muchos \`useState\` se vuelve una pesadilla. \`useReducer\` te permite centralizar la lógica en una función pura que es fácil de testear y entender.
-
-**1. Técnicas comunes:**
-- **Reducer:** Una función que recibe el estado actual y una "acción", y devuelve el nuevo estado.
-- **Dispatch:** La función que enviamos desde el componente para avisar que algo pasó (ej: \`dispatch({ type: 'UNDO' })\`).
-- **Inmutabilidad Extrema:** En los reducers, nunca uses \`.push()\` o \`.pop()\`. Siempre devuelve objetos y arreglos nuevos usando el operador spread.
-
-**2. Anti-patrones comunes:**
-- ❌ **Lógica pesada en el componente:** Dejar los cálculos del historial dentro del \`onClick\`. El componente solo debe "despachar" la intención.
-- ❌ **Efectos secundarios en el Reducer:** Un reducer debe ser una **función pura**. Nunca hagas fetch ni uses \`Math.random()\` dentro de él.
-- ⚠️ **Estado gordo:** No metas en el reducer datos que no están relacionados entre sí.
-
-**3. Ventajas de las buenas prácticas:**
-- **Predecibilidad:** Si sabes el estado inicial y la lista de acciones, sabes exactamente cómo se verá la app.
-- **Depuración:** Es mucho más fácil seguir el rastro de "qué acción rompió el estado".
-- **Preparación para Redux:** Este es exactamente el patrón que usan las librerías de estado global más famosas.
-
-**4. Ejemplos de código:**
-
-✅ **Correcto (Estructura de Reducer):**
-\`\`\`javascript
-function reducer(state, action) {
-  switch (action.type) {
-    case 'INCREMENT':
-      return { count: state.count + 1 };
-    default:
-      return state;
-  }
-}
-\`\`\`
-`,
+    introduction:
+      "Cuando el estado de un componente depende de su valor anterior de forma compleja (como un historial de 'deshacer'), usar muchos `useState` se vuelve una pesadilla. `useReducer` te permite centralizar la lógica en una función pura que es fácil de testear y entender.",
+    goodPractices: [
+      "Reducer: Una función que recibe el estado actual y una 'acción', y devuelve el nuevo estado.",
+      "Dispatch: La función que enviamos desde el componente para avisar que algo pasó (ej: `dispatch({ type: 'UNDO' })`).",
+      "Inmutabilidad Extrema: En los reducers, nunca uses `.push()` o `.pop()`. Siempre devuelve objetos y arreglos nuevos usando el operador spread.",
+    ],
+    badPractices: [
+      "Lógica pesada en el componente: Dejar los cálculos del historial dentro del `onClick`. El componente solo debe 'despachar' la intención.",
+      "Efectos secundarios en el Reducer: Un reducer debe ser una **función pura**. Nunca hagas fetch ni uses `Math.random()` dentro de él.",
+      "Estado gordo: No metas en el reducer datos que no están relacionados entre sí.",
+    ],
     examples: [
       "// Despachar acción\ndispatch({ type: 'SET_TEXT', payload: 'Nuevo texto' });",
       "// Estado inicial complejo\n{ past: [], present: '', future: [] }",
@@ -161,9 +140,6 @@ LISTA DE CHEQUEO:
    - ¿Mueve el present actual a past antes de actualizar?
    - ¿Limpia el future (ya que un nuevo cambio rompe la línea temporal futura)?
 5. ¿Los botones se deshabilitan correctamente basándose en la longitud de past y future?
-
-MENSAJE DE APROBACIÓN:
-{ "aprobado": true, "mensaje": "✅ ¡Increíble! Has construido una máquina de estados con historial. Este nivel de control sobre el estado es lo que distingue a los ingenieros de software senior en React." }
 `,
 
   estimatedTime: 30,

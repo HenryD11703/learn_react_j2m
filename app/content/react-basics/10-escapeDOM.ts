@@ -37,41 +37,18 @@ Si tu ref se llama 'inputRef', el elemento HTML es: \`inputRef.current\`.`,
 
   theory: {
     title: "useRef: La referencia persistente",
-    content: `
-**¿Por qué es importante?**
-React es declarativo (tú dices qué quieres ver y React lo hace). Pero a veces necesitamos ser **imperativos** (dar órdenes directas), como cuando queremos controlar un video, enfocar un input o integrar librerías externas que no conocen React.
-
-**1. Técnicas comunes:**
-- **Acceso al DOM:** Referenciar elementos HTML para usar sus métodos nativos (\`.focus()\`, \`.scrollIntoView()\`).
-- **Valores persistentes:** Guardar datos que sobreviven a los renders pero que, al cambiar, no "molestan" a React pidiéndole que dibuje de nuevo.
-- **Evitar re-renders:** Ideal para timers, IDs de intervalos o flags de "es la primera vez que renderizo".
-
-**2. Anti-patrones comunes:**
-- ❌ **Manipular el DOM manualmente:** No uses refs para cambiar el texto o el color (ej: \`ref.current.innerText = 'Hola'\`). ¡Eso es trabajo del Estado!
-- ❌ **Leer .current en el render:** No uses el valor de una referencia dentro del cuerpo de tu función de componente, ya que puede no estar sincronizado. Úsalo en eventos o useEffects.
-- ⚠️ **Sustituir a useState:** Si necesitas que el usuario vea el cambio en pantalla, NO uses una ref.
-
-**3. Ventajas de las buenas prácticas:**
-- **Performance:** Al no disparar renders innecesarios, la app es más rápida.
-- **Control Total:** Puedes manejar formularios complejos o integraciones con librerías de terceros (como gráficas o mapas).
-
-**4. Ejemplos de código:**
-
-✅ **Correcto (Foco automático):**
-\`\`\`javascript
-const inputRef = useRef(null);
-const focusInput = () => inputRef.current.focus();
-
-return <input ref={inputRef} />;
-\`\`\`
-
-❌ **Incorrecto (Tratando de usar ref como estado):**
-\`\`\`javascript
-const count = useRef(0);
-// ❌ Esto no se actualizará en la pantalla al hacer click
-return <div>{count.current}</div>; 
-\`\`\`
-`,
+    introduction:
+      "React es declarativo (tú dices qué quieres ver y React lo hace). Pero a veces necesitamos ser **imperativos** (dar órdenes directas), como cuando queremos controlar un video, enfocar un input o integrar librerías externas que no conocen React.",
+    goodPractices: [
+      "Acceso al DOM: Referenciar elementos HTML para usar sus métodos nativos (`.focus()`, `.scrollIntoView()`).",
+      "Valores persistentes: Guardar datos que sobreviven a los renders pero que, al cambiar, no 'molestan' a React pidiéndole que dibuje de nuevo.",
+      "Evitar re-renders: Ideal para timers, IDs de intervalos o flags de 'es la primera vez que renderizo'.",
+    ],
+    badPractices: [
+      "Manipular el DOM manualmente: No uses refs para cambiar el texto o el color (ej: `ref.current.innerText = 'Hola'`). ¡Eso es trabajo del Estado!",
+      "Leer .current en el render: No uses el valor de una referencia dentro del cuerpo de tu función de componente, ya que puede no estar sincronizado. Úsalo en eventos o useEffects.",
+      "Sustituir a useState: Si necesitas que el usuario vea el cambio en pantalla, NO uses una ref.",
+    ],
     examples: [
       "// Guardar un valor persistente\nconst timerRef = useRef(null);",
       "// Acceso al DOM\n<video ref={videoRef} />",
@@ -135,11 +112,8 @@ LISTA DE CHEQUEO:
 5. ¿Accede correctamente a la propiedad .current en ambos casos?
 
 ERRORES COMUNES:
-- ❌ Intentar acceder a la ref directamente sin usar .current: "⚠️ Recuerda que useRef devuelve un objeto. Debes usar .current para acceder al valor o al elemento del DOM."
-- ❌ Usar useState para el contador secreto: "⚠️ El objetivo es usar una referencia para guardar el dato SIN provocar que el componente se dibuje de nuevo."
-
-MENSAJE DE APROBACIÓN:
-{ "aprobado": true, "mensaje": "✅ ¡Perfecto! Has completado el set de 10 ejercicios. Dominas useRef tanto para controlar el DOM como para gestionar datos persistentes de forma eficiente." }
+- Intentar acceder a la ref directamente sin usar .current: "⚠️ Recuerda que useRef devuelve un objeto. Debes usar .current para acceder al valor o al elemento del DOM."
+- Usar useState para el contador secreto: "⚠️ El objetivo es usar una referencia para guardar el dato SIN provocar que el componente se dibuje de nuevo."
 `,
 
   estimatedTime: 15,

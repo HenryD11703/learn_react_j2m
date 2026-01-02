@@ -43,42 +43,18 @@ const handleClick = useCallback(() => { ... }, []);`,
 
   theory: {
     title: "Optimización y Memorización en React",
-    content: `
-**¿Por qué es importante?**
-Por defecto, cuando el estado de un componente cambia, React vuelve a renderizar **todos** sus hijos. En una lista de 500 elementos, esto significa 500 cálculos innecesarios en cada pulsación de tecla, lo que provoca lag y una mala experiencia de usuario.
-
-**1. Técnicas comunes:**
-- **React.memo:** Un componente de orden superior que "salta" el renderizado si las props son iguales a las anteriores.
-- **useMemo:** Memoriza el **resultado** de una función (un valor o arreglo filtrado).
-- **useCallback:** Memoriza la **definición** de una función para mantener su referencia estable.
-
-**2. Anti-patrones comunes:**
-- ❌ **Optimización prematura:** No memorices todo "por si acaso". La memorización tiene un costo de memoria; úsala solo cuando detectes lentitud.
-- ❌ **Funciones Inline en Props:** Pasar \`onClick={() => doSomething()}\` rompe \`React.memo\` porque la función es "nueva" en cada render.
-- ⚠️ **Dependencias vacías incorrectas:** Si usas un valor dentro de un \`useCallback\` pero no lo pones en su arreglo de dependencias, la función usará un valor "viejo" (stale).
-
-**3. Ventajas de las buenas prácticas:**
-- **Fluidez total:** El input de búsqueda responde instantáneamente sin importar el tamaño de la lista.
-- **Ahorro de recursos:** Menos uso de CPU, especialmente importante en dispositivos móviles.
-- **Escalabilidad:** Tu aplicación podrá manejar miles de datos sin degradar la experiencia.
-
-**4. Ejemplos de código:**
-
-✅ **Correcto (Componente Optimizado):**
-\`\`\`javascript
-const ListItem = memo(({ data, onAction }) => {
-  return <li onClick={onAction}>{data.name}</li>;
-});
-\`\`\`
-
-❌ **Incorrecto (Re-renders innecesarios):**
-\`\`\`javascript
-// Se recrea en cada render de App y rompe el memo de los hijos
-const handleSelect = () => console.log("Click"); 
-
-return items.map(i => <Item key={i.id} onClick={handleSelect} />);
-\`\`\`
-`,
+    introduction:
+      "Por defecto, cuando el estado de un componente cambia, React vuelve a renderizar **todos** sus hijos. En una lista de 500 elementos, esto significa 500 cálculos innecesarios en cada pulsación de tecla, lo que provoca lag y una mala experiencia de usuario.",
+    goodPractices: [
+      "React.memo: Un componente de orden superior que 'salta' el renderizado si las props son iguales a las anteriores.",
+      "useMemo: Memoriza el **resultado** de una función (un valor o arreglo filtrado).",
+      "useCallback: Memoriza la **definición** de una función para mantener su referencia estable.",
+    ],
+    badPractices: [
+      "Optimización prematura: No memorices todo 'por si acaso'. La memorización tiene un costo de memoria; úsala solo cuando detectes lentitud.",
+      "Funciones Inline en Props: Pasar `onClick={() => doSomething()}` rompe `React.memo` porque la función es 'nueva' en cada render.",
+      "Dependencias vacías incorrectas: Si usas un valor dentro de un `useCallback` pero no lo pones en su arreglo de dependencias, la función usará un valor 'viejo' (stale).",
+    ],
     examples: [
       "// Memorizar cálculo\nconst total = useMemo(() => slowCalc(data), [data]);",
       "// Memorizar componente\nexport default memo(MyComponent);",
@@ -145,15 +121,12 @@ El estudiante debe optimizar el rendimiento de una lista grande.
 LISTA DE CHEQUEO:
 1. ¿Creó un componente separado para el item de la lista?
 2. ¿Usó React.memo() (o memo de la importación) en el componente del item?
-   - ❌ Si no lo hizo: "⚠️ Cada item se sigue renderizando al escribir. Usa React.memo en el componente del item para evitar esto."
+   - Si no lo hizo: "⚠️ Cada item se sigue renderizando al escribir. Usa React.memo en el componente del item para evitar esto."
 3. ¿Usó useMemo para el filtrado de la lista?
-   - 💡 Si no lo hizo: "Tip: El filtrado es una operación que no debería repetirse si el término de búsqueda es el mismo. Usa useMemo."
+   - Si no lo hizo: "Tip: El filtrado es una operación que no debería repetirse si el término de búsqueda es el mismo. Usa useMemo."
 4. ¿Usó useCallback para la función handleSelect?
-   - ❌ Si pasa la función sin memorizar: "⚠️ Si no usas useCallback, la función cambia en cada render y rompe la optimización de React.memo en los hijos."
+   - Si pasa la función sin memorizar: "⚠️ Si no usas useCallback, la función cambia en cada render y rompe la optimización de React.memo en los hijos."
 5. ¿Evitó console.logs excesivos en la versión final?
-
-MENSAJE DE APROBACIÓN:
-{ "aprobado": true, "mensaje": "✅ ¡Impresionante! Has dominado las herramientas de optimización de React. Tu aplicación ahora es fluida y eficiente, capaz de manejar grandes volúmenes de datos sin despeinarse." }
 `,
 
   estimatedTime: 25,

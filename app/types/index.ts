@@ -17,8 +17,10 @@ export interface Exercise {
   // Teoría
   theory?: {
     title: string;
-    content: string; // Puede ser markdown
-    examples?: string[]; // Ejemplos de código
+    introduction?: string;
+    goodPractices?: string[];
+    badPractices?: string[];
+    examples?: string[];
   };
 
   // Configuración técnica

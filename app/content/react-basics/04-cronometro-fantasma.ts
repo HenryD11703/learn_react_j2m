@@ -48,42 +48,18 @@ return () => {
 
   theory: {
     title: "Ciclo de Vida y Limpieza de Efectos",
-    content: `
-**¿Por qué es importante?**
-Cuando conectas tu componente al mundo exterior (APIs, timers, suscripciones), esa conexión no se rompe sola. Si el componente desaparece pero la conexión sigue activa, creas un **Memory Leak**. Esto hace que tu app se vuelva pesada y lenta con el tiempo.
-
-**1. Técnicas comunes:**
-- **La Función de Limpieza:** Es el código que colocas en el \`return\` de tu \`useEffect\`.
-- **Efectos controlados:** Usar el arreglo de dependencias \`[]\` para asegurar que el intervalo solo se cree una vez al montar.
-- **Forma funcional de setEstado:** Usar \`s => s + 1\` para no depender de la variable externa y evitar re-ejecutar el efecto innecesariamente.
-
-**2. Anti-patrones comunes:**
-- ❌ **Olvidar el cleanup:** Dejar intervalos o event listeners activos después de desmontar.
-- ❌ **Ejecución inmediata:** Hacer \`return clearInterval(id)\` (ejecuta el clear al instante) en lugar de \`return () => clearInterval(id)\` (guarda la función para después).
-- ⚠️ **Múltiples timers:** No limpiar el efecto antes de que se cree uno nuevo si las dependencias cambian.
-
-**3. Ventajas de las buenas prácticas:**
-- Aplicaciones más rápidas y fluidas.
-- Evitas bugs extraños donde el estado se intenta actualizar en un componente que ya no existe.
-- Código profesional y predecible.
-
-**4. Ejemplos de código:**
-
-✅ **Correcto (Limpieza adecuada):**
-\`\`\`javascript
-useEffect(() => {
-  const timer = setInterval(() => {}, 1000);
-  return () => clearInterval(timer);
-}, []);
-\`\`\`
-
-❌ **Incorrecto (Fuga de memoria):**
-\`\`\`javascript
-useEffect(() => {
-  setInterval(() => {}, 1000); // ❌ Nunca se detendrá
-}, []);
-\`\`\`
-`,
+    introduction:
+      "Cuando conectas tu componente al mundo exterior (APIs, timers, suscripciones), esa conexión no se rompe sola. Si el componente desaparece pero la conexión sigue activa, creas un **Memory Leak**. Esto hace que tu app se vuelva pesada y lenta con el tiempo.",
+    goodPractices: [
+      "La Función de Limpieza: Es el código que colocas en el `return` de tu `useEffect`.",
+      "Efectos controlados: Usar el arreglo de dependencias `[]` para asegurar que el intervalo solo se cree una vez al montar.",
+      "Forma funcional de setEstado: Usar `s => s + 1` para no depender de la variable externa y evitar re-ejecutar el efecto innecesariamente.",
+    ],
+    badPractices: [
+      "Olvidar el cleanup: Dejar intervalos o event listeners activos después de desmontar.",
+      "Ejecución inmediata: Hacer `return clearInterval(id)` (ejecuta el clear al instante) en lugar de `return () => clearInterval(id)` (guarda la función para después).",
+      "Múltiples timers: No limpiar el efecto antes de que se cree uno nuevo si las dependencias cambian.",
+    ],
     examples: [
       "// Limpiando Event Listeners\nuseEffect(() => {\n  window.addEventListener('scroll', handle);\n  return () => window.removeEventListener('scroll', handle);\n}, []);",
     ],
@@ -146,14 +122,11 @@ El estudiante debe implementar un intervalo y su respectiva limpieza.
 LISTA DE CHEQUEO:
 1. ¿Usó setInterval dentro de useEffect?
 2. ¿Usó la forma funcional setSegundos(s => s + 1)?
-   - 💡 Si no lo hizo: "Tip: Usa la forma funcional setSegundos(s => s + 1) para evitar problemas con las dependencias del useEffect."
+   - Si no lo hizo suggestTip: "Tip: Usa la forma funcional setSegundos(s => s + 1) para evitar problemas con las dependencias del useEffect."
 3. ¿Retornó una función de limpieza? 
-   - ❌ Si falta el return: "⚠️ ¡Cuidado! Has creado el intervalo pero no lo estás limpiando. Debes retornar una función que ejecute clearInterval."
+   - Si falta el return: "⚠️ ¡Cuidado! Has creado el intervalo pero no lo estás limpiando. Debes retornar una función que ejecute clearInterval."
 4. ¿Usó la sintaxis de retorno correcta? 
-   - ❌ Si hizo return clearInterval(id): "⚠️ Estás ejecutando la limpieza inmediatamente. El return debe devolver una FUNCIÓN: return () => clearInterval(id)."
-
-MENSAJE DE APROBACIÓN:
-{ "aprobado": true, "mensaje": "✅ ¡Excelente! Has exorcizado al fantasma. Entender cuándo y cómo limpiar tus efectos es vital para construir aplicaciones de alto rendimiento." }
+   - Si hizo return clearInterval(id): "⚠️ Estás ejecutando la limpieza inmediatamente. El return debe devolver una FUNCIÓN: return () => clearInterval(id)."
 `,
 
   estimatedTime: 15,
