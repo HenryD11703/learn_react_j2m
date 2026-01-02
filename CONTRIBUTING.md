@@ -2,7 +2,7 @@
 
 ## Estructura del Ejercicio
 
-Lee la estructura del tipo `Ejercicio` en `/types/index.ts` para entender los campos necesarios.![alt text](image.png)
+Lee la estructura del tipo `Ejercicio` en `/types/index.ts` para entender los campos necesarios.
 Copia el template desde `app/content/react-basics/template.ts` y rellena cada sección siguiendo las pautas:
 
 ### 1. Metadata básica

@@ -20,18 +20,23 @@ export default async function ExercisePage({ params }: PageProps) {
   }
 
   return (
-    <div className="flex h-screen flex-col md:flex-row bg-[#0A0A0A] text-white">
+    <div className="grid grid-cols-[auto_1fr] md:grid-cols-[auto_auto_1fr] h-screen w-full bg-[#0A0A0A] overflow-hidden">
+      {/* 1. Activity Bar (Auto Width) */}
       <ExerciseNav exercises={exercisesList} currentSlug={slug} />
 
-      <ExerciseSidebar exercise={exercise} />
+      {/* 2. Primary Sidebar (Auto Width - Hidden on small) */}
+      <div className="hidden md:block w-80 lg:w-96 h-full overflow-hidden border-r border-white/10 bg-[#0A0A0A]">
+        <ExerciseSidebar exercise={exercise} />
+      </div>
 
-      {/* Editor Area */}
-      <div className="flex-1 min-h-0 h-full">
+      {/* 3. Editor Area (Remaining Space) */}
+      <main className="min-w-0 h-full relative bg-[#0A0A0A]">
         <ClientEditor
           files={exercise.files}
           aiInstruction={exercise.aiInstruction}
+          className="h-full"
         />
-      </div>
+      </main>
     </div>
   );
 }
