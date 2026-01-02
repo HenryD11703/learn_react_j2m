@@ -15,32 +15,43 @@ interface Props {
 
 export default function ClientEditor({ files, aiInstruction }: Props) {
   return (
-    <div className="relative w-full h-full bg-[#0A0A0A]">
-      <SandpackProvider template="react" theme="dark" files={files}>
-        <div className="absolute inset-0 bottom-[72px]">
+    <div className="w-full h-full bg-[#0A0A0A] flex flex-col">
+      <SandpackProvider
+        template="react"
+        theme="dark"
+        files={files}
+        className="flex flex-col h-full min-h-0" // Important: min-h-0 for nested flex scroll
+      >
+        {/* Editor Area - Takes all available space */}
+        <div className="flex-1 min-h-0 relative">
           <SandpackLayout
             style={{
               height: "100%",
-              minHeight: "100%",
+              borderRadius: 0,
+              border: "none",
             }}
           >
             <SandpackCodeEditor
               showTabs={true}
+              showLineNumbers={true}
+              showInlineErrors={true}
+              wrapContent={true}
               style={{
                 height: "100%",
-                fontSize: "14px",
-                lineHeight: "1.6",
+                fontSize: "13px",
+                fontFamily: "var(--font-geist-mono)", // Assuming we have this, or default mono
               }}
             />
             <SandpackPreview
               showOpenInCodeSandbox={false}
-              style={{ height: "100%" }}
               showRefreshButton={true}
+              style={{ height: "100%" }}
             />
           </SandpackLayout>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 h-[72px]">
+        {/* Terminal/Review Panel - Sits at bottom */}
+        <div className="z-10">
           <ReviewPanel instruction={aiInstruction} />
         </div>
       </SandpackProvider>
