@@ -42,9 +42,9 @@ Plataforma interactiva para aprender React y avanzar de nivel Junior a Mid-Level
     ```
 
 3.  Configura las variables de entorno:
-    Crea un archivo `.env` en la raíz (puedes basarte en un `.env.example` si existe o añadir tu key directamente):
+    Crea un archivo `.env` en la raíz:
     ```env
-    GOOGLE_API_KEY=tu_api_key_aqui
+    GROQ_API_KEY=tu_api_key_aqui
     ```
 
 4.  Inicia el servidor de desarrollo:
